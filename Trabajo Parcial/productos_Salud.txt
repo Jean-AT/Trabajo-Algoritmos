@@ -1,0 +1,5 @@
+105 Termómetro 5 7
+102 Ibuprofeno 2 14
+103 Alcohol_en_gel 1.75 22
+101 Paracetamol 1.5 7
+104 Curitas 0.5 44
