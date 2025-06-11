@@ -201,29 +201,42 @@ void Lista<T>::agregar(T d) //100
     nodo = nuevo;
 }
 
+
 template<class T>
 inline void Lista<T>::intercambiar(uint pos1, uint pos2)
 {
+    // Validate that positions are within list bounds
     if (pos1 >= lon || pos2 >= lon) {
         std::cerr << "Error: Índices fuera de rango en intercambiar." << std::endl;
         return;
     }
+    // If positions are the same, there's nothing to swap
     if (pos1 == pos2) {
-        return; // No need to swap if positions are the same
+        return;
     }
 
-    // Find the nodes at pos1 and pos2
+    // Find the first node at position 'pos1'
     Nodo<T>* nodo1 = ini;
     for (uint i = 0; i < pos1; ++i) {
+        // Use get_Sgte() to traverse
         nodo1 = nodo1->get_Sgte();
     }
 
+    // Find the second node at position 'pos2'
     Nodo<T>* nodo2 = ini;
     for (uint i = 0; i < pos2; ++i) {
+        // Use get_Sgte() to traverse
         nodo2 = nodo2->get_Sgte();
     }
 
-    // Swap the data (elem) within the nodes
-    // This is the most practical way for quicksort on a singly linked list
-    std::swap(nodo1->elem, nodo2->elem);
+    // Get the elements from the nodes
+    T elem1 = nodo1->get_Elem();
+    T elem2 = nodo2->get_Elem();
+
+    // Swap the retrieved elements
+    std::swap(elem1, elem2);
+
+    // Set the swapped elements back into the nodes
+    nodo1->set_Elem(elem1);
+    nodo2->set_Elem(elem2);
 }
