@@ -126,11 +126,13 @@
     <ClCompile Include="Trabajo Parcial.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArbolB.h" />
     <ClInclude Include="archivo.h" />
     <ClInclude Include="Carrito.h" />
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Cola_.h" />
+    <ClInclude Include="Heap.h" />
     <ClInclude Include="Lista.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Nodo.h" />
