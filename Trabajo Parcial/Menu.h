@@ -8,23 +8,6 @@
 #include <iostream>
 #include <string>
 
-void ordenarListaPorPrecio(Lista<producto*>* lista) {
-    if (lista->esVacia()) return;
-
-    bool cambio;
-    do {
-        cambio = false;
-        for (int i = 0; i < lista->longitud() - 1; i++) {
-            producto* prod1 = lista->obtenerPos(i);
-            producto* prod2 = lista->obtenerPos(i + 1);
-            if (prod1->getprecio() < prod2->getprecio()) {
-                lista->modificarPos(prod2, i);
-                lista->modificarPos(prod1, i + 1);
-                cambio = true;
-            }
-        }
-    } while (cambio);
-}
 
 
 class Controlador
@@ -152,15 +135,14 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario),i);
                 i++;
             }
-            ordenarListaPorPrecio(List_productos);
-            for (int i = 0; i < List_productos->longitud(); i++)
-            {
-                
-                List_productos->obtenerPos(i)->toString();
-            }
+            List_Carrito->ordenar([](producto* a, producto* b) {
+                return a->getprecio() < b->getprecio();
+                });
+            List_productos->foreach([](producto* p) { p->toString(); });//lambda
+
             nomArch.close();
 
-            cout << "\nIngrese el c骴igo del producto que desea seleccionar: ";
+            cout << "\nIngrese el c贸digo del producto que desea seleccionar: ";
             cin >> codigoBuscado;
 
             // Leer y actualizar inventario
@@ -177,7 +159,7 @@ inline void Controlador::RegistrarProducto(int a)
                     {
                         List_productos->obtenerPos(i)->disminuir_stock();
                         cout << "\nProducto seleccionado:\n";
-                        cout << "C骴igo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "C贸digo: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -205,7 +187,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con c骴igo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con c贸digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -235,7 +217,9 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario), i);
                 i++;
             }
-            ordenarListaPorPrecio(List_productos);
+            List_Carrito->ordenar([](producto* a, producto* b) {
+                return a->getprecio() < b->getprecio();
+                });
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -244,7 +228,7 @@ inline void Controlador::RegistrarProducto(int a)
             }
             nomArch.close();
 
-            cout << "\nIngrese el c骴igo del producto que desea seleccionar: ";
+            cout << "\nIngrese el c贸digo del producto que desea seleccionar: ";
             cin >> codigoBuscado;
 
             // Leer y actualizar inventario
@@ -261,7 +245,7 @@ inline void Controlador::RegistrarProducto(int a)
                     {
                         List_productos->obtenerPos(i)->disminuir_stock();
                         cout << "\nProducto seleccionado:\n";
-                        cout << "C骴igo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "C贸digo: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -288,7 +272,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con c骴igo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con c贸digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -317,7 +301,9 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario),i);
                 i++;
             }
-            ordenarListaPorPrecio(List_productos);
+            List_Carrito->ordenar([](producto* a, producto* b) {
+                return a->getprecio() < b->getprecio();
+                });
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -326,7 +312,7 @@ inline void Controlador::RegistrarProducto(int a)
             }
             nomArch.close();
 
-            cout << "\nIngrese el c骴igo del producto que desea seleccionar: ";
+            cout << "\nIngrese el c贸digo del producto que desea seleccionar: ";
             cin >> codigoBuscado;
 
             // Leer y actualizar inventario
@@ -343,7 +329,7 @@ inline void Controlador::RegistrarProducto(int a)
                     {
                         List_productos->obtenerPos(i)->disminuir_stock();
                         cout << "\nProducto seleccionado:\n";
-                        cout << "C骴igo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "C贸digo: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -370,7 +356,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con c骴igo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con c贸digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -384,12 +370,12 @@ inline void Controlador::RegistrarProducto(int a)
 
 inline void Controlador::RegistarCliente()
 {
-    string Correo, contrase馻, nombre;
+    string Correo, contrase帽a, nombre;
     int telefono;
     string distrito;
     cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - REGISTRO DE USUARIO - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
     cout << "Ingrese su correo :"; cin >> Correo;
-    cout << "Ingrese su contrase馻 :"; cin >> contrase馻;
+    cout << "Ingrese su contrase帽a :"; cin >> contrase帽a;
     cout << "Ingrese su nombre:"; cin >> nombre;
     cout << "Ingrese su numero de telefono :"; cin >> telefono;
     cout << "Ingrese su distrito :" << endl;
@@ -406,7 +392,9 @@ inline void Controlador::Vercarrito()
     int opccarito;
     cout << "- - - - - - - - - - - - - - - - - - - - - CARRITO - - - - - - - - - - - - - - - - - - -" << endl;
     cout << "1.Terminar Pedido  || 2. Eliminar Pedido" << endl;
-    ordenarListaPorPrecio(List_Carrito);
+	List_Carrito->ordenar([](producto* a, producto* b) {
+		return a->getprecio() < b->getprecio();
+		});
 
     for (int i = 0; i < List_Carrito->longitud(); i++)
     {
@@ -444,17 +432,11 @@ inline void Controlador::Vercarrito()
 
     case 2:
 
-        cout << "Ingrese el c骴igo del producto a eliminar: "; cin >> eliminar;
+        cout << "Ingrese el c贸digo del producto a eliminar: "; cin >> eliminar;
 
 
-        for (int i = 0; i < List_Carrito->longitud(); i++)
-        {
-            if (List_Carrito->obtenerPos(i)->getid() == eliminar)
-            {
-                List_Carrito->eliminaPos(i);
-            }
-            
-        }
+        List_Carrito->removeIf([eliminar](producto* p) { return p->getid() == eliminar; });//lambda
+
 
         break;
     default:
@@ -573,9 +555,4 @@ inline void Controlador::PedidoRealizado()
 }
 
 
-
-
-
-
-
-
+ 
