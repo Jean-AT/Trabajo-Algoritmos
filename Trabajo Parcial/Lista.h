@@ -1,5 +1,7 @@
 ﻿#include "Nodo.h"
 #include <functional>
+using namespace std;
+
 typedef unsigned int uint;
 template <class T>
 class Lista {
@@ -29,10 +31,13 @@ public:
     void eliminaPos(uint pos);
     void eliminaFinal();
     void eliminarTodo();
+    void ordenar(function<bool(T, T)> compardor);
     T obtenerInicial();
     T obtenerPos(uint pos);
     T obtenerFinal();
-    T buscar(T elem);
+    T buscar(function<bool(T)> predicado);
+    void foreach(function<void(T)> funcion);
+    void removeIf(function<bool(T)> predicado);
 
 
     //~Lista(void);
@@ -70,15 +75,15 @@ void Lista<T>::agregaInicial(T elem) {
     }
 }
 template <class T>
-T Lista<T>::buscar(T elem) {
+T Lista<T>::buscar(function<bool(T)> predicado) {
     Nodo<T>* aux = ini;
     while (aux != nullptr) {
-        if (comparar(aux->elem, elem) == 0) {
-            return aux->elem;
+        if (predicado(aux->get_Elem())) {
+            return aux->get_Elem();
         }
-        aux = aux->sgte;
+        aux = aux->get_Sgte();
     }
-    return 0;
+    return nullptr; 
 }
 
 template <class T>
@@ -199,6 +204,56 @@ void Lista<T>::agregar(T d) //100
     nodo = nuevo;
 }
 
+template <typename T>
+void Lista<T>::ordenar(std::function<bool(T, T)> comparador) {
+    if (esVacia()) return;
+    bool cambio;
+    do {
+        cambio = false;
+        for (int i = 0; i < longitud() - 1; i++) {
+            T a = obtenerPos(i);
+            T b = obtenerPos(i + 1);
+            if (comparador(a, b)) {
+                modificarPos(b, i);
+                modificarPos(a, i + 1);
+                cambio = true;
+            }
+        }
+    } while (cambio);
+}
 
+template <class T>
+void Lista<T>::foreach(function<void(T)> funcion){
+    Nodo<T>* aux = ini;
+    while (aux != nullptr) {
+        func(aux->get_Elem());
+        aux = aux->get_Sgte();
+    }
+}
 
-
+template <class T>
+void Lista<T>::removeIf(function<bool(T)> predicado) {
+	Nodo<T>* actual = ini;
+	Nodo<T>* anterior = nullptr;
+	while (actual != nullptr) {
+		if (predicado(actual->get_Elem())) {
+			if (anterior == nullptr) {
+				// Eliminar el primer nodo
+				ini = actual->get_Sgte();
+				delete actual;
+				actual = ini;
+			}
+			else {
+				// Eliminar un nodo intermedio o final
+				anterior->set_Sgte(actual->get_Sgte());
+				delete actual;
+				actual = anterior->get_Sgte();
+			}
+			lon--;
+		}
+		else {
+			anterior = actual;
+			actual = actual->get_Sgte();
+		}
+	}
+}
