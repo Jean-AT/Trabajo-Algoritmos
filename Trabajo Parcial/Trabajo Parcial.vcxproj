@@ -135,6 +135,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="NodoC.h" />
+    <ClInclude Include="Ordenamientos.h" />
     <ClInclude Include="producto.h" />
     <ClInclude Include="Repartidor.h" />
     <ClInclude Include="User.h" />

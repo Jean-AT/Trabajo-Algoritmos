@@ -51,6 +51,8 @@ public:
     void addOrdenado(T d);// suma nodos ordenados de menor a mayor
     bool esta(T d); //retorna true cuando d est� en la lista
     void borrarDato(T d);// borra el nodo que contiene a d
+    void intercambiar(uint pos1, uint pos2);
+
 
 };
 template <class T>
@@ -199,6 +201,29 @@ void Lista<T>::agregar(T d) //100
     nodo = nuevo;
 }
 
+template<class T>
+inline void Lista<T>::intercambiar(uint pos1, uint pos2)
+{
+    if (pos1 >= lon || pos2 >= lon) {
+        std::cerr << "Error: Índices fuera de rango en intercambiar." << std::endl;
+        return;
+    }
+    if (pos1 == pos2) {
+        return; // No need to swap if positions are the same
+    }
 
+    // Find the nodes at pos1 and pos2
+    Nodo<T>* nodo1 = ini;
+    for (uint i = 0; i < pos1; ++i) {
+        nodo1 = nodo1->get_Sgte();
+    }
 
+    Nodo<T>* nodo2 = ini;
+    for (uint i = 0; i < pos2; ++i) {
+        nodo2 = nodo2->get_Sgte();
+    }
 
+    // Swap the data (elem) within the nodes
+    // This is the most practical way for quicksort on a singly linked list
+    std::swap(nodo1->elem, nodo2->elem);
+}
