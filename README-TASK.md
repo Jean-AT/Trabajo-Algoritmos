@@ -11,6 +11,6 @@ XX --- Tarea --- Cantidad avanzado
       	añadir métodos diferentes como insertar
       	buscar u ordenar)
 
-04 --- 3 Algoritmos de ordenamiento avanzado --- DONE
+04 --- 3 Algoritmos de ordenamiento avanzado --- DONE(in the branch OrdenamientosAvz)
 
 05 --- Generar un dataset propio --- X
