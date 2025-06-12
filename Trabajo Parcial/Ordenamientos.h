@@ -6,30 +6,42 @@
 using namespace std;
 
 //QUICKSORT
+//Se usa para ordenar por precio
 
-int particion(Lista<producto*>* A, int p, int r) {
+int particion(Lista<producto*>* A, int p, int r,bool menor) {
 
     double x = A->obtenerPos(r)->getprecio();
 
     int i = p - 1;
 
-    for (int j = p; j < r; j++) {
-        if (A->obtenerPos(j)->getprecio() >= x) {
-            i++;
-            A->intercambiar(i, j);
+    if (!menor)
+    {
+        for (int j = p; j < r; j++) {
+            if (A->obtenerPos(j)->getprecio() >= x) {
+                i++;
+                A->intercambiar(i, j);
+            }
+        }
+    }else{
+        for (int j = p; j < r; j++) {
+            if (A->obtenerPos(j)->getprecio() <= x) {
+                i++;
+                A->intercambiar(i, j);
+            }
         }
     }
+    
     A->intercambiar(i + 1, r);
     return i + 1;
 }
 
-void quicksort(Lista<producto*>* A, int p, int r) {
+void quicksort(Lista<producto*>* A, int p, int r,bool menor) {
     int q; 
 
     if (p < r) {
-        q = particion(A, p, r); 
-        quicksort(A, p, q - 1); 
-        quicksort(A, q + 1, r);
+        q = particion(A, p, r,menor); 
+        quicksort(A, p, q - 1,menor); 
+        quicksort(A, q + 1, r,menor);
     }
 }
 
@@ -78,32 +90,60 @@ void mergeSort(int* A, int n) {
 
 //QUICKSELECT
 
-int particion(int* A, int p, int r) {
-    int x = A[r]; //el pivote
+int particionSelect(Lista<producto*>* A, int p, int r,bool menor) {
+    int x = A->obtenerPos(r)->getprecio(); //el pivote
     int i = p - 1; //indice de los menores
-    for (int j = p; j < r; j++) {
-        if (A[j] <= x) {
-            i++;
-            swap(A[i], A[j]);
+    if (menor) {
+        // Quiero los más baratos ? precios menores a la izquierda
+        for (int j = p; j < r; j++) {
+            if (A->obtenerPos(j)->getprecio() <= x) {
+                i++;
+                A->intercambiar(i, j);
+            }
         }
     }
-    swap(A[i + 1], A[r]);
+    else {
+        // Quiero los más caros ? precios mayores a la izquierda
+        for (int j = p; j < r; j++) {
+            if (A->obtenerPos(j)->getprecio() >= x) {
+                i++;
+                A->intercambiar(i, j);
+            }
+        }
+    }
+    A->intercambiar(i+1,r);
     return i + 1;
 }
 
-int quickselect(int* A, int p, int r, int k) {
-    if (p == r) return A[p];
+int quickselect(Lista<producto*>* A, int p, int r, int k,bool menor) {
+    if (p == r) return A->obtenerPos(p)->getprecio();
     //indice del pivote con A ordenado Izq(Menores) Der(Mayores) al pivote
-    int q = particion(A, p, r);
+    int q = particionSelect(A, p, r,menor);
     int l = q - p + 1; //nro elementos del sub arreglo donde se encuentra el kesimo elemento
     if (k == l)
-        return A[q];
+        return A->obtenerPos(q)->getprecio();
     else if (k < l) {
-        return quickselect(A, p, q - 1, k);
+        return quickselect(A, p, q - 1, k,menor);
     }
     else {
-        return quickselect(A, q + 1, r, k - l);
+        return quickselect(A, q + 1, r, k - l, menor);
     }
 
+}
 
+void ObtenerMasCoB(Lista<producto*>* A, bool menor) {
+    int indx = 2;
+    producto* p;
+    // Paso 1: Reorganiza para que los k estén al inicio
+    quickselect(A, 0, A->longitud() - 1, indx, menor);
+
+    // Paso 2: Ordena esos k productos
+    quicksort(A, 0, indx - 1, menor);
+
+
+    for (int i = 0; i < indx; i++)
+    {
+        p = A->obtenerPos(i);
+        cout << "Producto: " << p->getid() << ", Precio: " << p->getprecio() << ", Nombre: " << p->getnombre() << endl;
+    }
 }
