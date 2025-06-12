@@ -1,9 +1,8 @@
-#include "Lista.h"
 #include "Cliente.h"
 #include "Repartidor.h"
-#include "producto.h"
 #include "Carrito.h"
 #include "Cola_.h"
+#include "Ordenamientos.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -120,6 +119,7 @@ inline void Controlador::RegistrarProducto(int a)
     int codigo, codigoBuscado, inventario;
     string nombre;
     float precio;
+    bool menor;
     
     bool encontrado = false;
     ifstream nomArch;
@@ -152,7 +152,10 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario),i);
                 i++;
             }
-            ordenarListaPorPrecio(List_productos);
+
+            cout << "Ordenar de mayor a menor?:\n";
+            cin >> menor;
+            quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
             for (int i = 0; i < List_productos->longitud(); i++)
             {
                 
@@ -221,7 +224,6 @@ inline void Controlador::RegistrarProducto(int a)
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE SALUD - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl;
-        cout << "1.Ordenar  || 2.Agregar al carrito" << endl;
         //ACA VA LA LISTAR SALUD
         nomArch.open("productos_Salud.txt", ios::in);
         if (nomArch.is_open())
@@ -235,7 +237,9 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario), i);
                 i++;
             }
-            ordenarListaPorPrecio(List_productos);
+            cout << "Ordenar de mayor a menor?:\n";
+            cin >> menor;
+            quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -303,7 +307,6 @@ inline void Controlador::RegistrarProducto(int a)
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE BEBIDAS - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl;
-        cout << "1.Ordenar  || 2.Agregar al carrito" << endl;
         //ACA VA LA LISTAR SALUD
         nomArch.open("productos_Bebidas.txt", ios::in);
         if (nomArch.is_open())
@@ -317,7 +320,9 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario),i);
                 i++;
             }
-            ordenarListaPorPrecio(List_productos);
+            cout << "Ordenar de mayor a menor?:\n";
+            cin >> menor;
+            quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -501,6 +506,12 @@ void Controlador::Menu()
             break;
 
         case 2:
+            List_Bebidas = nullptr;
+            List_Carrito = nullptr;
+            List_Comida = nullptr;
+            List_productos = nullptr;
+            List_Repartidor = nullptr;
+            List_Salud = nullptr;
             exit(0);
             break;
         default:
