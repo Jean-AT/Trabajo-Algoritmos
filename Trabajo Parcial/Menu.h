@@ -43,6 +43,31 @@ public:
     void InterfazUsuario();
     void PedidoRealizado();
 
+    double CalcularTotal(Cola<Repartidor*>* Cola_Repartidor, int indx, double precio, int i = 0) {
+        //// Validación básica
+        //if (Cola_Repartidor == nullptr) {
+        //    cout << "Cola no inicializada." << endl;
+        //    return -1;
+        //}
+
+        //if (i > indx) {
+        //    cout << "Índice fuera de rango." << endl;
+        //    return -1;
+        //}
+
+        //Repartidor* repartidor = Cola_Repartidor->obtenerPos(i);
+        //if (repartidor == nullptr) {
+        //    cout << "Repartidor no encontrado." << endl;
+        //    return -1;
+        //}
+
+        if (i == indx) {
+            return precio + Cola_Repartidor->obtenerPos(indx)->gettarifa();
+        }
+
+        return CalcularTotal(Cola_Repartidor, indx, precio, i + 1);
+    }
+
 private:
     Lista<producto*>* List_Comida;
     Lista<producto*>* List_Salud;
@@ -483,9 +508,10 @@ void Controlador::Menu()
     {
         switch (mainmenu)
         {
-        case 9:
+        case 6:
             ListarRepartidores();
-            break;
+            CalcularTotal(Cola_Repartidor, eleccionRepartidor, 10);
+
         case 1:
 
             system("cls");
@@ -551,7 +577,7 @@ inline void Controlador::PedidoRealizado()
 {
     system("cls");
 
-    int total= 0;
+    double precio= 0.0;
     cout << "- - - - - - - - - - - - - - - - - - - - - PEDIDOS REALIZADOS - - - - - - - - - - - - -" << endl;
     cout << "Resumen del pedido: " << endl;
 
@@ -559,7 +585,7 @@ inline void Controlador::PedidoRealizado()
     {
         Cola_resumen->encolar(new producto(List_Carrito->obtenerPos(i)->getid(),
             List_Carrito->obtenerPos(i)->getnombre(), List_Carrito->obtenerPos(i)->getprecio(), List_Carrito->obtenerPos(i)->getstock()));
-        total += List_Carrito->obtenerPos(i)->getprecio();
+        precio += List_Carrito->obtenerPos(i)->getprecio();
         
     }
     producto* Producto;
@@ -569,7 +595,10 @@ inline void Controlador::PedidoRealizado()
         Producto->toString();
 
     } while (!Cola_resumen->esVacia());
-    cout << " EL TOTAL SERIA :" << 6 << endl;;
+
+    double total = CalcularTotal(Cola_Repartidor, eleccionRepartidor, precio);
+
+    cout << " EL TOTAL SERIA :" << precio << " " << eleccionRepartidor<< endl;;
 }
 
 

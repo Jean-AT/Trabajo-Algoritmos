@@ -65,20 +65,14 @@ T Cola<T>::desencolar()
 template <class T>
 T Cola<T>::obtenerPos(int pos)
 {
-	if (esVacia()) {
-		throw std::out_of_range("La cola está vacía.");
-	}
-
 	NodoC<T>* actual = inicio;
-	int contador = 0;
-
+	int i = 0;
 	while (actual != nullptr) {
-		if (contador == pos) {
+		if (i == pos) {
 			return actual->dato;
 		}
 		actual = actual->siguiente;
-		contador++;
+		i++;
 	}
-
-	throw std::out_of_range("Índice fuera de rango.");
+	return nullptr; // si no lo encuentra
 }
