@@ -37,63 +37,49 @@ public:
     //Funciones Para Cliente
     void RegistarCliente();
     void Vercarrito();
-    int CalcularTotal(int selecRepartidor, int precio) {
-        if (selecRepartidor == 0)
-            return precio;
-        else
-            return 1 + CalcularTotal(precio, selecRepartidor - 1);
-    }
+
     //Funciones Main
     void Menu();
     void InterfazUsuario();
     void PedidoRealizado();
+
 private:
     Lista<producto*>* List_Comida;
     Lista<producto*>* List_Salud;
     Lista<producto*>* List_Bebidas;
-    Cola<Repartidor*>* List_Repartidor;
+    Cola<Repartidor*>* Cola_Repartidor;
     Lista<producto*>* List_Carrito;
     Lista<producto*>* List_productos;
     Cola<producto*>* Cola_resumen;
     Cliente* user;
+    Repartidor* repart;
 
     int nro_Productos = 5;
-    int nro_Repartidores = 5;
+    int nro_Repartidores = 0;
     int nro_Carrito;
     int eleccionRepartidor;
 };
 
 inline Controlador::Controlador()
 {
+    srand(time(0));
     List_Bebidas = new Lista<producto*>();
     List_Carrito = new Lista<producto*>();
     List_Comida = new Lista<producto*>();
     List_Salud = new Lista<producto*>();
-    List_Repartidor = new Cola<Repartidor*>();
+    Cola_Repartidor = new Cola<Repartidor*>();
     List_productos = new Lista<producto*>();
     Cola_resumen = new Cola<producto*>();
 
-    Repartidor* nro1 = new Repartidor(2, "Jose");
-    Repartidor* nro2 = new Repartidor(1, "Luis");
-    Repartidor* nro3 = new Repartidor(3, "Armando");
-    Repartidor* nro4 = new Repartidor(2, "Sebastian");
-    Repartidor* nro5 = new Repartidor(1, "Oscar");
-    Repartidor* nro6 = new Repartidor(3, "Juan");
-    Repartidor* nro7 = new Repartidor(2, "Tommy");
-    Repartidor* nro8 = new Repartidor(2, "Nilton");
-    Repartidor* nro9 = new Repartidor(3, "Cesar");
-    Repartidor* nro10 = new Repartidor(1, "Matheo");
+    for (int i = 0; i < 5; i++)
+    {
+        repart = new Repartidor(nro_Repartidores);
+        Cola_Repartidor->encolar(repart);
+        nro_Repartidores++;
+    }
+    
 
-    List_Repartidor->encolar(nro1);
-    List_Repartidor->encolar(nro2);
-    List_Repartidor->encolar(nro3);
-    List_Repartidor->encolar(nro4);
-    List_Repartidor->encolar(nro10);
-    List_Repartidor->encolar(nro5);
-    List_Repartidor->encolar(nro6);
-    List_Repartidor->encolar(nro7);
-    List_Repartidor->encolar(nro8);
-    List_Repartidor->encolar(nro9);
+
 }
 
 inline void Controlador::ListarRepartidores()
@@ -103,9 +89,9 @@ inline void Controlador::ListarRepartidores()
     Repartidor* repar;
     do
     {
-        repar = List_Repartidor->desencolar();
-        repar->toString();
-    } while (!List_Repartidor->esVacia());
+        repar = Cola_Repartidor->desencolar();
+        repar->MostrarTdo();
+    } while (!Cola_Repartidor->esVacia());
 
     cout << endl << "Elije a tu repartidor:"; cin >> eleccionRepartidor;
 
@@ -138,7 +124,6 @@ inline void Controlador::RegistrarProducto(int a)
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE COMIDA - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl;
-        cout << "1.Ordenar  || 2.Agregar al carrito" << endl;
         //ACA VA LA LISTAR SALUD
         nomArch.open("productos_Comida.txt", ios::in);
         if (nomArch.is_open())
@@ -153,7 +138,7 @@ inline void Controlador::RegistrarProducto(int a)
                 i++;
             }
 
-            cout << "Ordenar de mayor a menor?:\n";
+            cout << "Ordenar de mayor a menor? (0 = Si || 1 = No:\n";
             cin >> menor;
             quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
             for (int i = 0; i < List_productos->longitud(); i++)
@@ -237,6 +222,7 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario), i);
                 i++;
             }
+            ObtenerMasCoB(List_productos, false);
             cout << "Ordenar de mayor a menor?:\n";
             cin >> menor;
             quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
@@ -497,6 +483,9 @@ void Controlador::Menu()
     {
         switch (mainmenu)
         {
+        case 9:
+            ListarRepartidores();
+            break;
         case 1:
 
             system("cls");
@@ -510,7 +499,7 @@ void Controlador::Menu()
             List_Carrito = nullptr;
             List_Comida = nullptr;
             List_productos = nullptr;
-            List_Repartidor = nullptr;
+            Cola_Repartidor = nullptr;
             List_Salud = nullptr;
             exit(0);
             break;
@@ -580,8 +569,9 @@ inline void Controlador::PedidoRealizado()
         Producto->toString();
 
     } while (!Cola_resumen->esVacia());
-    cout << " EL TOTAL SERIA :" << CalcularTotal(1, total) << endl;;
+    cout << " EL TOTAL SERIA :" << 6 << endl;;
 }
+
 
 
 

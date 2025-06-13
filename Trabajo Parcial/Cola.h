@@ -17,6 +17,7 @@ public:
 	void encolar(T v);
 	T desencolar();
 	bool esVacia();
+	T obtenerPos(int pos);
 };
 
 //IMPLEMENTACIÓN
@@ -59,4 +60,25 @@ T Cola<T>::desencolar()
 		inicio = inicio->siguiente;
 	}
 	return dato;
+}
+
+template <class T>
+T Cola<T>::obtenerPos(int pos)
+{
+	if (esVacia()) {
+		throw std::out_of_range("La cola está vacía.");
+	}
+
+	NodoC<T>* actual = inicio;
+	int contador = 0;
+
+	while (actual != nullptr) {
+		if (contador == pos) {
+			return actual->dato;
+		}
+		actual = actual->siguiente;
+		contador++;
+	}
+
+	throw std::out_of_range("Índice fuera de rango.");
 }
