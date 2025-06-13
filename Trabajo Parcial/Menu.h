@@ -131,7 +131,7 @@ inline void Controlador::RegistrarProducto(int a)
     string nombre;
     float precio;
     bool menor;
-    
+    int stockelegido = 0;
     bool encontrado = false;
     ifstream nomArch;
     ofstream tempArch;
@@ -175,7 +175,8 @@ inline void Controlador::RegistrarProducto(int a)
 
             cout << "\nIngrese el código del producto que desea seleccionar: ";
             cin >> codigoBuscado;
-
+            cout << "Ingrese la cantidad de stock que desea: ";
+            cin >> stockelegido;
             // Leer y actualizar inventario
             nomArch.open("productos_Comida.txt", ios::in);
             tempArch.open("temp.txt", ios::out);
@@ -188,7 +189,7 @@ inline void Controlador::RegistrarProducto(int a)
                 {
                     if (List_productos->obtenerPos(i)->getstock() > 0)
                     {
-                        List_productos->obtenerPos(i)->disminuir_stock();
+                        List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
                         cout << "Código: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
@@ -261,7 +262,8 @@ inline void Controlador::RegistrarProducto(int a)
 
             cout << "\nIngrese el código del producto que desea seleccionar: ";
             cin >> codigoBuscado;
-
+            cout << "Ingrese la cantidad de stock que desea: ";
+            cin >> stockelegido;
             // Leer y actualizar inventario
             nomArch.open("productos_Salud.txt", ios::in);
             tempArch.open("temp.txt", ios::out);
@@ -274,7 +276,7 @@ inline void Controlador::RegistrarProducto(int a)
                 {
                     if (List_productos->obtenerPos(i)->getstock() > 0)
                     {
-                        List_productos->obtenerPos(i)->disminuir_stock();
+                        List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
                         cout << "Código: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
@@ -344,7 +346,8 @@ inline void Controlador::RegistrarProducto(int a)
 
             cout << "\nIngrese el código del producto que desea seleccionar: ";
             cin >> codigoBuscado;
-
+            cout << "Ingrese la cantidad de stock que desea: ";
+            cin >> stockelegido;
             // Leer y actualizar inventario
             nomArch.open("productos_Bebidas.txt", ios::in);
             tempArch.open("temp.txt", ios::out);
@@ -357,7 +360,7 @@ inline void Controlador::RegistrarProducto(int a)
                 {
                     if (List_productos->obtenerPos(i)->getstock() > 0)
                     {
-                        List_productos->obtenerPos(i)->disminuir_stock();
+                        List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
                         cout << "Código: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
