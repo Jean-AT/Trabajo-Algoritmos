@@ -44,23 +44,6 @@ public:
     void PedidoRealizado();
 
     double CalcularTotal(Cola<Repartidor*>* Cola_Repartidor, int indx, double precio, int i = 0) {
-        //// Validación básica
-        //if (Cola_Repartidor == nullptr) {
-        //    cout << "Cola no inicializada." << endl;
-        //    return -1;
-        //}
-
-        //if (i > indx) {
-        //    cout << "Índice fuera de rango." << endl;
-        //    return -1;
-        //}
-
-        //Repartidor* repartidor = Cola_Repartidor->obtenerPos(i);
-        //if (repartidor == nullptr) {
-        //    cout << "Repartidor no encontrado." << endl;
-        //    return -1;
-        //}
-
         if (i == indx) {
             return precio + Cola_Repartidor->obtenerPos(indx)->gettarifa();
         }
@@ -102,25 +85,26 @@ inline Controlador::Controlador()
         Cola_Repartidor->encolar(repart);
         nro_Repartidores++;
     }
-    
-
-
 }
 
 inline void Controlador::ListarRepartidores()
 {
     cout << "- - - - - - - - - - - - - - - - - - - LISTA DE REPARTIDORES - - - - - - - - - - - - - - - - - - - - -" << endl;
-
-    Repartidor* repar;
-    do
+	Cola<Repartidor*>* temp_Cola = new Cola<Repartidor*>();//Cola temporal para almacenar repartidores
+	// Mostrar repartidores y almacenarlos en la cola temporal
+    while (!Cola_Repartidor->esVacia())
     {
-        repar = Cola_Repartidor->desencolar();
+        Repartidor* repar = Cola_Repartidor->desencolar();
         repar->MostrarTdo();
-    } while (!Cola_Repartidor->esVacia());
+        temp_Cola->encolar(repar);
+    }
+	// Reinsertar repartidores en la cola original
+    while (!temp_Cola->esVacia()) {
+        Cola_Repartidor->encolar(temp_Cola->desencolar());
+    }
+    delete temp_Cola; //Se eliminar la cola temp
 
     cout << endl << "Elije a tu repartidor:"; cin >> eleccionRepartidor;
-
-    
 }
 
 inline void Controlador::RegistrarProducto(int a)
@@ -511,10 +495,6 @@ void Controlador::Menu()
     {
         switch (mainmenu)
         {
-        case 6:
-            ListarRepartidores();
-            CalcularTotal(Cola_Repartidor, eleccionRepartidor, 10);
-
         case 1:
 
             system("cls");
@@ -601,7 +581,7 @@ inline void Controlador::PedidoRealizado()
 
     double total = CalcularTotal(Cola_Repartidor, eleccionRepartidor, precio);
 
-    cout << " EL TOTAL SERIA :" << precio << " " << eleccionRepartidor<< endl;;
+    cout << " EL TOTAL SERIA :" << total << endl;;
 }
 
 

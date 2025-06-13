@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArbolB.h" />
+    <ClInclude Include="ArbolBB.h" />
     <ClInclude Include="archivo.h" />
     <ClInclude Include="Carrito.h" />
     <ClInclude Include="Cliente.h" />
