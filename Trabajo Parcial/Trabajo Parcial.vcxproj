@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{83a014ad-d88a-4198-bf2d-c08b58462066}</ProjectGuid>
+    <ProjectGuid>{3D4BCDAB-F84C-4D5D-A2BA-A6B9396C539B}</ProjectGuid>
     <RootNamespace>TrabajoParcial</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
