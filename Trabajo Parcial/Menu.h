@@ -5,6 +5,7 @@
 #include "Ordenamientos.h"
 #include <fstream>
 #include <iostream>
+#include "TablaHash.h"
 #include <string>
 //Hola
 void ordenarListaPorPrecio(Lista<producto*>* lista) {
@@ -119,6 +120,7 @@ inline void Controlador::RegistrarProducto(int a)
     bool encontrado = false;
     ifstream nomArch;
     ofstream tempArch;
+    string nombreBuscar;
     cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE PRODUCTOS - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
     cout << "                                                         1.Comida" << endl;
     cout << "                                                         2.Salud" << endl;
@@ -147,6 +149,8 @@ inline void Controlador::RegistrarProducto(int a)
                 i++;
             }
 
+
+
             cout << "Ordenar de mayor a menor? (0 = Si || 1 = No:\n";
             cin >> menor;
             quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
@@ -157,11 +161,55 @@ inline void Controlador::RegistrarProducto(int a)
             }
             nomArch.close();
 
+
+
+            //--HAST TABLE DE PRODUCTOS
+            
+            HashTablaString* ht = new HashTablaString(100);
+            for (int i = 0; i < List_productos->longitud(); i++)
+            {
+                ht->insertar(List_productos->obtenerPos(i)->getnombre(), List_productos->obtenerPos(i));
+                
+
+			}
+
+            
+            while (true)
+            {
+                cout << "Desea ingresar un producto por nombre? (1 = Si || 0 = No): ";
+                cin >> menor;
+                if (menor == 1)
+                {
+                    std::cout << "\nBuscar nombre: ";
+                    std::cin >> nombreBuscar;
+
+                    int index = ht->buscar(nombreBuscar);
+                    if (index != -1)
+                        std::cout << nombreBuscar << " se encuentra en la posicion " << index << std::endl;
+                    else
+                        std::cout << nombreBuscar << " no se encontro en la tabla." << std::endl;
+
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+            delete ht;
+
+
+
+
+
+
+            //-----------------------
+
             cout << "\nIngrese el código del producto que desea seleccionar: ";
             cin >> codigoBuscado;
             cout << "Ingrese la cantidad de stock que desea: ";
             cin >> stockelegido;
-            // Leer y actualizar inventario
+            // Leer y actualizar inventario 
             nomArch.open("productos_Comida.txt", ios::in);
             tempArch.open("temp.txt", ios::out);
 
@@ -243,6 +291,45 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->obtenerPos(i)->toString();
             }
             nomArch.close();
+
+
+
+            //--HAST TABLE DE PRODUCTOS
+
+            HashTablaString* ht = new HashTablaString(100);
+            for (int i = 0; i < List_productos->longitud(); i++)
+            {
+                ht->insertar(List_productos->obtenerPos(i)->getnombre(), List_productos->obtenerPos(i));
+
+
+            }
+
+
+            while (true)
+            {
+                cout << "Desea ingresar un producto por nombre? (1 = Si || 0 = No): ";
+                cin >> menor;
+                if (menor == 1)
+                {
+                    std::cout << "\nBuscar nombre: ";
+                    std::cin >> nombreBuscar;
+
+                    int index = ht->buscar(nombreBuscar);
+                    if (index != -1)
+                        std::cout << nombreBuscar << " se encuentra en la posicion " << index << std::endl;
+                    else
+                        std::cout << nombreBuscar << " no se encontro en la tabla." << std::endl;
+
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+            delete ht;
+
+
 
             cout << "\nIngrese el código del producto que desea seleccionar: ";
             cin >> codigoBuscado;
@@ -327,6 +414,53 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->obtenerPos(i)->toString();
             }
             nomArch.close();
+
+            
+
+
+            //--HAST TABLE DE PRODUCTOS
+
+            HashTablaString* ht = new HashTablaString(100);
+            for (int i = 0; i < List_productos->longitud(); i++)
+            {
+                ht->insertar(List_productos->obtenerPos(i)->getnombre(), List_productos->obtenerPos(i));
+
+
+            }
+
+            //ht->imprimir();
+
+            while (true)
+            {
+                cout << "Desea ingresar un producto por nombre? (1 = Si || 0 = No): ";
+                cin >> menor;
+                if (menor == 1)
+                {
+                    std::cout << "\nBuscar nombre: ";
+                    std::cin >> nombreBuscar;
+
+                    int index = ht->buscar(nombreBuscar);
+                    if (index != -1)
+                        std::cout << nombreBuscar << " se encuentra en la posicion " << index << std::endl;
+                    else
+                        std::cout << nombreBuscar << " no se encontro en la tabla." << std::endl;
+
+                    
+                }
+                else
+                {
+                    break;
+                }
+            }
+			delete ht; // Liberar memoria de la tabla hash
+
+            //
+            
+
+
+
+
+            
 
             cout << "\nIngrese el código del producto que desea seleccionar: ";
             cin >> codigoBuscado;

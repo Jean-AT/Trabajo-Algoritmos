@@ -65,7 +65,14 @@
     <ClInclude Include="ArbolB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="TablaHash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HashEntidad.h">
+=======
     <ClInclude Include="ArbolBB.h">
+>>>>>>> 11d5db7b6555c81007282af586e1561ed2314f5b
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

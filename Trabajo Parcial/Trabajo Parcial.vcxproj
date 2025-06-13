@@ -133,6 +133,7 @@
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Cola_.h" />
+    <ClInclude Include="HashEntidad.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Lista.h" />
     <ClInclude Include="Menu.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Ordenamientos.h" />
     <ClInclude Include="producto.h" />
     <ClInclude Include="Repartidor.h" />
+    <ClInclude Include="TablaHash.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
