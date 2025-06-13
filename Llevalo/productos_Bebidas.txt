@@ -1,0 +1,5 @@
+305 Café_instantáneo 2.5 14
+304 Leche_entera 1.4 21
+302 Jugo_de_naranja 1.2 24
+303 Refresco_cola 1 43
+301 Agua_mineral 0.6 46

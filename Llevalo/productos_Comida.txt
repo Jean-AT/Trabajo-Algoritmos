@@ -1,0 +1,5 @@
+203 Aceite_vegetal 3.5 17
+204 Lentejas 1.3 29
+202 Fideos 1.1 30
+201 Arroz 0.9 11
+205 Galletas 0.8 44
