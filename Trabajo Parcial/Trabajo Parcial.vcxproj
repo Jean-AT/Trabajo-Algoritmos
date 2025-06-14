@@ -146,6 +146,7 @@
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="historial_Productos.txt" />
     <Text Include="productos_Bebidas.txt" />
     <Text Include="productos_Comida.txt" />
     <Text Include="productos_Salud.txt" />

@@ -44,6 +44,24 @@ public:
     void InterfazUsuario();
     void PedidoRealizado();
 
+	void GuardarHistorial() {
+        ofstream archivo("historial_Productos.txt", ios::app);
+        if (archivo.is_open()) {
+            for (int i = 0; i < List_Carrito->longitud(); i++) {
+                archivo << List_Carrito->obtenerPos(i)->getid() << " "
+                    << List_Carrito->obtenerPos(i)->getnombre() << " "
+                    << List_Carrito->obtenerPos(i)->getprecio() << " "
+                    << List_Carrito->obtenerPos(i)->getstock() << endl;
+            }
+            archivo.close();
+        }
+        else {
+            cout << "No se pudo abrir el archivo de historial." << endl;
+        }
+    }
+
+    void VerHistorial();
+
     double CalcularTotal(Cola<Repartidor*>* Cola_Repartidor, int indx, double precio, int i = 0) {
         if (i == indx) {
             return precio + Cola_Repartidor->obtenerPos(indx)->gettarifa();
@@ -51,6 +69,8 @@ public:
 
         return CalcularTotal(Cola_Repartidor, indx, precio, i + 1);
     }
+
+    void GenerarArbolBalanceado();
 
 private:
     Lista<producto*>* List_Comida;
@@ -60,6 +80,7 @@ private:
     Lista<producto*>* List_Carrito;
     Lista<producto*>* List_productos;
     Cola<producto*>* Cola_resumen;
+    Lista<producto*>* Lista_Historial;
     Cliente* user;
     Repartidor* repart;
 
@@ -79,7 +100,7 @@ inline Controlador::Controlador()
     Cola_Repartidor = new Cola<Repartidor*>();
     List_productos = new Lista<producto*>();
     Cola_resumen = new Cola<producto*>();
-
+	Lista_Historial = new Lista<producto*>();
     for (int i = 0; i < 5; i++)
     {
         repart = new Repartidor(nro_Repartidores);
@@ -622,6 +643,7 @@ void Controlador::Menu()
 
     cout << "                                                  Llevalo" << endl << endl << endl;
     cout << "                                            1.Ingresar Sesion" << endl;
+    cout << "                                            2.Crear Cuenta" << endl;
     cout << "                                                  2.Salir" << endl;
 
     cin >> mainmenu;
@@ -667,6 +689,8 @@ inline void Controlador::InterfazUsuario()
         cout << "                                                          1.Pedir" << endl;
         cout << "                                                        2.Ver Carrito" << endl;
         cout << "                                                      3.Ver Mis Pedidos" << endl;
+        cout << "                                                      4.Ver los productos mas Caros/Baratos" << endl;
+        cout << "                                                      5.Ver Historial de compra" << endl;
         cin >> interfaz;
         switch (interfaz)
         {
@@ -682,6 +706,12 @@ inline void Controlador::InterfazUsuario()
         case 3:
             PedidoRealizado();
             break;
+        case 4:
+            break;
+        case 5:
+            system("cls");
+            VerHistorial();
+			break;
         default:
             break;
         }
@@ -712,16 +742,44 @@ inline void Controlador::PedidoRealizado()
         Producto->toString();
 
     } while (!Cola_resumen->esVacia());
+    GuardarHistorial();
 
     double total = CalcularTotal(Cola_Repartidor, eleccionRepartidor, precio);
 
     cout << " EL TOTAL SERIA :" << total << endl;;
 }
 
+inline void Controlador::VerHistorial()
+{
+    int codigo, inventario, i = 0;
+    string nombre;
+    float precio;
+    ifstream nomArch("historial_productos.txt", ios::in);
+    if (nomArch.is_open())
+    {
+        cout << "Lista de productos disponibles:\n";
+        cout << "----------------------------------\n";
 
 
 
+        while (nomArch >> codigo >> nombre >> precio >> inventario)
+        {
+            Lista_Historial->agregaPos(new producto(codigo, nombre, precio, inventario), i);
+            i++;
+        }
 
+        for (int j = 0; j < Lista_Historial->longitud(); j++)
+        {
+            Lista_Historial->obtenerPos(j)->toString();
+        }
+
+        nomArch.close();
+    }
+    else
+    {
+        cout << "No se pudo abrir el archivo historial_productos.txt\n";
+    }
+}
 
 
 

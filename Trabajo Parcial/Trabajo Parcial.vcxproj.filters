@@ -1,84 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="Trabajo Parcial.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Trabajo Parcial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Carrito.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cliente.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cola.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cola_.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Lista.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Nodo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NodoC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="producto.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Repartidor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="archivo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ordenamientos.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Heap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ArbolB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="TablaHash.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HashEntidad.h">
-=======
-    <ClInclude Include="ArbolBB.h">
->>>>>>> 11d5db7b6555c81007282af586e1561ed2314f5b
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="ArbolB.h" />
+    <ClInclude Include="ArbolBB.h" />
+    <ClInclude Include="archivo.h" />
+    <ClInclude Include="Carrito.h" />
+    <ClInclude Include="Cliente.h" />
+    <ClInclude Include="Cola.h" />
+    <ClInclude Include="Cola_.h" />
+    <ClInclude Include="HashEntidad.h" />
+    <ClInclude Include="Heap.h" />
+    <ClInclude Include="Lista.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Nodo.h" />
+    <ClInclude Include="NodoC.h" />
+    <ClInclude Include="Ordenamientos.h" />
+    <ClInclude Include="producto.h" />
+    <ClInclude Include="Repartidor.h" />
+    <ClInclude Include="TablaHash.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="productos_Bebidas.txt" />
     <Text Include="productos_Comida.txt" />
     <Text Include="productos_Salud.txt" />
+    <Text Include="historial_Productos.txt" />
   </ItemGroup>
 </Project>
