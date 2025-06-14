@@ -129,15 +129,18 @@
     <ClInclude Include="ArbolB.h" />
     <ClInclude Include="ArbolBB.h" />
     <ClInclude Include="archivo.h" />
+    <ClInclude Include="AVL.h" />
     <ClInclude Include="Carrito.h" />
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Cola_.h" />
+    <ClInclude Include="GestorUsuarios.h" />
     <ClInclude Include="HashEntidad.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Lista.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="NodoAVL.h" />
     <ClInclude Include="NodoC.h" />
     <ClInclude Include="Ordenamientos.h" />
     <ClInclude Include="producto.h" />
@@ -150,6 +153,7 @@
     <Text Include="productos_Bebidas.txt" />
     <Text Include="productos_Comida.txt" />
     <Text Include="productos_Salud.txt" />
+    <Text Include="usuarios.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

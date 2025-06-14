@@ -7,6 +7,10 @@
 #include <iostream>
 #include "TablaHash.h"
 #include <string>
+#include "User.h"
+#include "AVL.h"
+#include "GestorUsuarios.h"
+#include <conio.h>
 //Hola
 void ordenarListaPorPrecio(Lista<producto*>* lista) {
     if (lista->esVacia()) return;
@@ -26,6 +30,25 @@ void ordenarListaPorPrecio(Lista<producto*>* lista) {
     } while (cambio);
 }
 
+string leerContrasena() {
+    string contrasena;
+    char ch;
+    while ((ch = _getch()) != '\r') { // '\r' es Enter
+        if (ch == '\b') { // Retroceso
+            if (!contrasena.empty()) {
+                contrasena.pop_back();
+                cout << "\b \b";
+            }
+        }
+        else {
+            contrasena += ch;
+            cout << '*';
+        }
+    }
+    cout << endl;
+    return contrasena;
+}
+
 
 class Controlador
 {
@@ -38,13 +61,22 @@ public:
     //Funciones Para Cliente
     void RegistarCliente();
     void Vercarrito();
-
+	//Funciones de usuario
+    void RegistrarUsuario();
+    bool IniciarSesion();
     //Funciones Main
     void Menu();
     void InterfazUsuario();
     void PedidoRealizado();
 
-	void GuardarHistorial() {
+    double CalcularTotal(Cola<Repartidor*>* Cola_Repartidor, int indx, double precio, int i = 0) {
+        if (i == indx) {
+            return precio + Cola_Repartidor->obtenerPos(indx)->gettarifa();
+        }
+
+        return CalcularTotal(Cola_Repartidor, indx, precio, i + 1);
+    }
+    void GuardarHistorial() {
         ofstream archivo("historial_Productos.txt", ios::app);
         if (archivo.is_open()) {
             for (int i = 0; i < List_Carrito->longitud(); i++) {
@@ -59,19 +91,9 @@ public:
             cout << "No se pudo abrir el archivo de historial." << endl;
         }
     }
-
     void VerHistorial();
 
-    double CalcularTotal(Cola<Repartidor*>* Cola_Repartidor, int indx, double precio, int i = 0) {
-        if (i == indx) {
-            return precio + Cola_Repartidor->obtenerPos(indx)->gettarifa();
-        }
-
-        return CalcularTotal(Cola_Repartidor, indx, precio, i + 1);
-    }
-
     void GenerarArbolBalanceado();
-
 private:
     Lista<producto*>* List_Comida;
     Lista<producto*>* List_Salud;
@@ -81,9 +103,10 @@ private:
     Lista<producto*>* List_productos;
     Cola<producto*>* Cola_resumen;
     Lista<producto*>* Lista_Historial;
+
     Cliente* user;
     Repartidor* repart;
-
+    AVLTree<User> arbolUsuarios;
     int nro_Productos = 5;
     int nro_Repartidores = 0;
     int nro_Carrito;
@@ -100,13 +123,16 @@ inline Controlador::Controlador()
     Cola_Repartidor = new Cola<Repartidor*>();
     List_productos = new Lista<producto*>();
     Cola_resumen = new Cola<producto*>();
-	Lista_Historial = new Lista<producto*>();
+    Lista_Historial = new Lista<producto*>();
+
     for (int i = 0; i < 5; i++)
     {
         repart = new Repartidor(nro_Repartidores);
         Cola_Repartidor->encolar(repart);
         nro_Repartidores++;
     }
+
+    cargarUsuariosDesdeArchivo(arbolUsuarios, "usuarios.txt");
 }
 
 inline void Controlador::ListarRepartidores()
@@ -558,6 +584,44 @@ inline void Controlador::RegistarCliente()
     Cliente* user = new Cliente(nombre, telefono, distrito, Correo);
 }
 
+inline void Controlador::RegistrarUsuario() {
+    string nombre, correo, contraseña, distrito;
+    int telefono;
+    cout << "Nombre: "; cin >> nombre;
+    cout << "Telefono: "; cin >> telefono;
+    cout << "Distrito: "; cin >> distrito;
+    cout << "Correo: "; cin >> correo;
+    cout << "Contraseña: "; cin >> contraseña;
+
+    // Verifica si ya existe el usuario
+    if (arbolUsuarios.buscar(nombre) != nullptr) {
+        cout << "El usuario ya existe." << endl;
+        return;
+    }
+
+    User* nuevo = new User(nombre, telefono, distrito, correo, contraseña);
+    arbolUsuarios.insertar(nuevo);
+    guardarUsuariosEnArchivo(arbolUsuarios, "usuarios.txt");
+    cout << "Usuario registrado correctamente." << endl;
+}
+
+bool Controlador::IniciarSesion() {
+    string nombre, contraseña;
+    cout << "Nombre: "; cin >> nombre;
+    cout << "Contraseña: ";
+    contraseña = leerContrasena(); // Aquí se oculta la contraseña con asteriscos
+
+    User* usuario = arbolUsuarios.buscar(nombre);
+    if (usuario && usuario->getContraseña() == contraseña) {
+        cout << "¡Bienvenido, " << usuario->getNombre() << "!" << endl;
+        return true;
+    }
+    else {
+        cout << "Usuario o contraseña incorrectos." << endl;
+        return false;
+    }
+}
+
 inline void Controlador::Vercarrito()
 {
     int eliminar;
@@ -642,9 +706,9 @@ void Controlador::Menu()
     cout << "                                                                                                                     " << endl;
 
     cout << "                                                  Llevalo" << endl << endl << endl;
-    cout << "                                            1.Ingresar Sesion" << endl;
-    cout << "                                            2.Crear Cuenta" << endl;
-    cout << "                                                  2.Salir" << endl;
+    cout << "                                             1.Ingresar Sesion" << endl;
+    cout << "                                         2.Registrar Nuevo Usuario" << endl;
+    cout << "                                                  3.Salir" << endl;
 
     cin >> mainmenu;
     do
@@ -652,14 +716,17 @@ void Controlador::Menu()
         switch (mainmenu)
         {
         case 1:
+            if (IniciarSesion())
+            {
+                InterfazUsuario();
+            }
+            break;
+        case 2:
 
-            system("cls");
-            RegistarCliente();
-            system("cls");
-            InterfazUsuario();
+			RegistrarUsuario();
             break;
 
-        case 2:
+        case 3:
             List_Bebidas = nullptr;
             List_Carrito = nullptr;
             List_Comida = nullptr;
@@ -679,8 +746,8 @@ void Controlador::Menu()
 
 inline void Controlador::InterfazUsuario()
 {
-    int a=0;
-    
+    int a = 0;
+
     int interfaz;
     do
     {
@@ -711,13 +778,13 @@ inline void Controlador::InterfazUsuario()
         case 5:
             system("cls");
             VerHistorial();
-			break;
+            break;
         default:
             break;
         }
 
-    } while (0<interfaz<3);
-    
+    } while (0 < interfaz < 3);
+
 }
 
 inline void Controlador::PedidoRealizado()
@@ -742,7 +809,6 @@ inline void Controlador::PedidoRealizado()
         Producto->toString();
 
     } while (!Cola_resumen->esVacia());
-    GuardarHistorial();
 
     double total = CalcularTotal(Cola_Repartidor, eleccionRepartidor, precio);
 
@@ -780,6 +846,34 @@ inline void Controlador::VerHistorial()
         cout << "No se pudo abrir el archivo historial_productos.txt\n";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

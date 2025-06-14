@@ -1,0 +1,112 @@
+﻿  Trabajo Parcial.cpp
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Ordenamientos.h(94,11): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Ordenamientos.h(117,51): warning C4244: 'return': conversión de 'double' a 'int'; posible pérdida de datos
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Ordenamientos.h(121,43): warning C4244: 'return': conversión de 'double' a 'int'; posible pérdida de datos
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(21,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(82,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(118,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(204,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(216,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(265,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(335,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(347,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(391,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(458,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(471,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(522,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(161,9): warning C4101: 'Ordyaf': variable local sin referencia
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(633,23): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(644,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(672,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(743,15): warning C4804: '<': uso no seguro del tipo 'bool' en la operación
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(786,16): warning C4804: '<': uso no seguro del tipo 'bool' en la operación
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(798,23): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(837,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(94,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+      C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(94,27):
+      el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Ordenamientos.h(13,16):
+          Vea la referencia a la creación de una instancia de clase plantilla "Lista<producto *>" que se está compilando
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(87,44):
+          al compilar la función del miembro clase plantilla "void Lista<producto *>::agregaPos(T,uint)"
+          with
+          [
+              T=producto *
+          ]
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(195,42):
+              vea la primera referencia a “Lista<producto *>::agregaPos” en “Controlador::RegistrarProducto”
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(161,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+      C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(161,27):
+      el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(158,47):
+          al compilar la función del miembro clase plantilla "void Lista<producto *>::modificarPos(T,uint)"
+          with
+          [
+              T=producto *
+          ]
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Menu.h(25,36):
+              vea la primera referencia a “Lista<producto *>::modificarPos” en “ordenarListaPorPrecio”
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(182,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Trabajo%20Parcial.cpp")
+      C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(182,27):
+      el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Lista.h(179,34):
+          al compilar la función del miembro clase plantilla "T Lista<T>::obtenerPos(uint)"
+          with
+          [
+              T=producto *
+          ]
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Trabajo Parcial\Ordenamientos.h(13,14):
+              vea la primera referencia a “Lista<producto *>::obtenerPos” en “particion”
+  
+  Trabajo Parcial.vcxproj -> C:\Users\RODRIGO\Source\Repos\Trabajo-Algoritmos\x64\Debug\Trabajo Parcial.exe
