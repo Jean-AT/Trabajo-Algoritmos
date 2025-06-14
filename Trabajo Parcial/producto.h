@@ -22,7 +22,7 @@ public:
 	int getstock();
 
 
-	void disminuir_stock();
+	void disminuir_stock(int num);
 	void toString()
 	{
 		
@@ -70,7 +70,7 @@ int producto::getstock()
 	return this->stock;
 
 }
-void producto::disminuir_stock()
+void producto::disminuir_stock(int num)
 {
-	this->stock--;
+	this->stock=stock-num;
 }

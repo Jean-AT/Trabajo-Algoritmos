@@ -1,7 +1,5 @@
 ﻿#include "Nodo.h"
 #include <functional>
-using namespace std;
-
 typedef unsigned int uint;
 template <class T>
 class Lista {
@@ -31,13 +29,10 @@ public:
     void eliminaPos(uint pos);
     void eliminaFinal();
     void eliminarTodo();
-    void ordenar(function<bool(T, T)> compardor);
     T obtenerInicial();
     T obtenerPos(uint pos);
     T obtenerFinal();
-    T buscar(function<bool(T)> predicado);
-    void foreach(function<void(T)> funcion);
-    void removeIf(function<bool(T)> predicado);
+    T buscar(T elem);
 
 
     //~Lista(void);
@@ -56,6 +51,8 @@ public:
     void addOrdenado(T d);// suma nodos ordenados de menor a mayor
     bool esta(T d); //retorna true cuando d est� en la lista
     void borrarDato(T d);// borra el nodo que contiene a d
+    void intercambiar(uint pos1, uint pos2);
+
 
 };
 template <class T>
@@ -75,15 +72,15 @@ void Lista<T>::agregaInicial(T elem) {
     }
 }
 template <class T>
-T Lista<T>::buscar(function<bool(T)> predicado) {
+T Lista<T>::buscar(T elem) {
     Nodo<T>* aux = ini;
     while (aux != nullptr) {
-        if (predicado(aux->get_Elem())) {
-            return aux->get_Elem();
+        if (comparar(aux->elem, elem) == 0) {
+            return aux->elem;
         }
-        aux = aux->get_Sgte();
+        aux = aux->sgte;
     }
-    return nullptr; 
+    return 0;
 }
 
 template <class T>
@@ -204,56 +201,42 @@ void Lista<T>::agregar(T d) //100
     nodo = nuevo;
 }
 
-template <typename T>
-void Lista<T>::ordenar(std::function<bool(T, T)> comparador) {
-    if (esVacia()) return;
-    bool cambio;
-    do {
-        cambio = false;
-        for (int i = 0; i < longitud() - 1; i++) {
-            T a = obtenerPos(i);
-            T b = obtenerPos(i + 1);
-            if (comparador(a, b)) {
-                modificarPos(b, i);
-                modificarPos(a, i + 1);
-                cambio = true;
-            }
-        }
-    } while (cambio);
-}
 
-template <class T>
-void Lista<T>::foreach(function<void(T)> funcion){
-    Nodo<T>* aux = ini;
-    while (aux != nullptr) {
-        func(aux->get_Elem());
-        aux = aux->get_Sgte();
+template<class T>
+inline void Lista<T>::intercambiar(uint pos1, uint pos2)
+{
+    // Validate that positions are within list bounds
+    if (pos1 >= lon || pos2 >= lon) {
+        std::cerr << "Error: Índices fuera de rango en intercambiar." << std::endl;
+        return;
     }
-}
+    // If positions are the same, there's nothing to swap
+    if (pos1 == pos2) {
+        return;
+    }
 
-template <class T>
-void Lista<T>::removeIf(function<bool(T)> predicado) {
-	Nodo<T>* actual = ini;
-	Nodo<T>* anterior = nullptr;
-	while (actual != nullptr) {
-		if (predicado(actual->get_Elem())) {
-			if (anterior == nullptr) {
-				// Eliminar el primer nodo
-				ini = actual->get_Sgte();
-				delete actual;
-				actual = ini;
-			}
-			else {
-				// Eliminar un nodo intermedio o final
-				anterior->set_Sgte(actual->get_Sgte());
-				delete actual;
-				actual = anterior->get_Sgte();
-			}
-			lon--;
-		}
-		else {
-			anterior = actual;
-			actual = actual->get_Sgte();
-		}
-	}
+    // Find the first node at position 'pos1'
+    Nodo<T>* nodo1 = ini;
+    for (uint i = 0; i < pos1; ++i) {
+        // Use get_Sgte() to traverse
+        nodo1 = nodo1->get_Sgte();
+    }
+
+    // Find the second node at position 'pos2'
+    Nodo<T>* nodo2 = ini;
+    for (uint i = 0; i < pos2; ++i) {
+        // Use get_Sgte() to traverse
+        nodo2 = nodo2->get_Sgte();
+    }
+
+    // Get the elements from the nodes
+    T elem1 = nodo1->get_Elem();
+    T elem2 = nodo2->get_Elem();
+
+    // Swap the retrieved elements
+    std::swap(elem1, elem2);
+
+    // Set the swapped elements back into the nodes
+    nodo1->set_Elem(elem1);
+    nodo2->set_Elem(elem2);
 }
