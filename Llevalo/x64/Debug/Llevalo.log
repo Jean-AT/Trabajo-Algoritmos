@@ -1,0 +1,89 @@
+﻿  Llevalo.cpp
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(154,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(237,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(317,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(102,9): warning C4101: 'Ordyaf': variable local sin referencia
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(400,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(483,15): warning C4804: '<': uso no seguro del tipo 'bool' en la operación
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(518,15): warning C4804: '<': uso no seguro del tipo 'bool' en la operación
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(530,23): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(534,56): warning C4244: '+=': conversión de 'double' a 'int'; posible pérdida de datos
+  (compilando archivo de origen "Llevalo.cpp")
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(97,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+      C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(97,27):
+      el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(52,24):
+          Vea la referencia a la creación de una instancia de clase plantilla "Lista<producto *>" que se está compilando
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(90,44):
+          al compilar la función del miembro clase plantilla "void Lista<producto *>::agregaPos(T,uint)"
+          with
+          [
+              T=producto *
+          ]
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(135,42):
+              vea la primera referencia a “Lista<producto *>::agregaPos” en “Controlador::RegistrarProducto”
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(213,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+      C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(213,27):
+      el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(208,62):
+          al compilar la función del miembro clase plantilla "void Lista<producto *>::ordenar(std::function<bool (T,T)>)"
+          with
+          [
+              T=producto *
+          ]
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(138,34):
+              vea la primera referencia a “Lista<producto *>::ordenar” en “Controlador::RegistrarProducto”
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(185,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+      C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(185,27):
+      el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(182,34):
+          al compilar la función del miembro clase plantilla "T Lista<T>::obtenerPos(uint)"
+          with
+          [
+              T=producto *
+          ]
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(156,17):
+              vea la primera referencia a “Lista<producto *>::obtenerPos” en “Controlador::RegistrarProducto”
+  
+C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(164,27): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "Llevalo.cpp")
+      C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(164,27):
+      el contexto de creación de instancias de la plantilla (el más antiguo primero) es
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(62,27):
+          al compilar la función del miembro clase plantilla "uint Lista<producto *>::longitud(void)"
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(154,13):
+              vea la primera referencia a “Lista<producto *>::longitud” en “Controlador::RegistrarProducto”
+          C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(161,47):
+          al compilar la función del miembro clase plantilla "void Lista<producto *>::modificarPos(T,uint)"
+          with
+          [
+              T=producto *
+          ]
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Lista.h(217,29):
+              vea la primera referencia a “Lista<producto *>::modificarPos” en “Lista<producto *>::ordenar”
+              C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\Llevalo\Menu.h(138,34):
+              vea la primera referencia a “Lista<producto *>::ordenar” en “Controlador::RegistrarProducto”
+  
+  Llevalo.vcxproj -> C:\Users\RODRIGO\source\repos\Trabajo-Algoritmos\x64\Debug\Llevalo.exe
