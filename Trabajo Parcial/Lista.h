@@ -10,7 +10,10 @@ private:
 
 public:
     Lista() : ini(nullptr), lon(0) { nodo = new Nodo<T>(); }
-    ~Lista();
+    ~Lista() {
+        eliminarTodo();
+        delete nodo;
+    }
     /*Lista() {
         nodo = new Nodo<T>();
     };*/
@@ -83,25 +86,28 @@ T Lista<T>::buscar(T elem) {
     return 0;
 }
 
-template <class T>
+template <typename T>
 void Lista<T>::agregaPos(T elem, uint pos) {
-    if (pos > lon) return;
-    if (pos == 0) {
-        agregaInicial(elem);
+    Nodo<T>* nuevo = new Nodo<T>(elem);
+
+    if (ini == nullptr || pos <= 0) {
+        // Insert at the beginning if list is empty or pos is 0 or negative
+        nuevo->set_Sgte(ini);
+        ini = nuevo;
     }
     else {
         Nodo<T>* aux = ini;
-        for (int i = 1; i < pos; i++) {
+        int i = 0;
+        // Traverse to the node before the desired position
+        while (aux->get_Sgte() != nullptr && i < pos - 1) {
             aux = aux->get_Sgte();
+            i++;
         }
-        Nodo<T>* nuevo = new Nodo<T>(elem);
+        // Insert the new node
         nuevo->set_Sgte(aux->get_Sgte());
-        if (nuevo != nullptr) {
-
-            aux->set_Sgte(nuevo);
-            lon++;
-        }
+        aux->set_Sgte(nuevo);
     }
+    lon++; // Update the length of the list
 }
 template <class T>
 void Lista<T>::agregaFinal(T elem) {
@@ -240,3 +246,5 @@ inline void Lista<T>::intercambiar(uint pos1, uint pos2)
     nodo1->set_Elem(elem1);
     nodo2->set_Elem(elem2);
 }
+
+

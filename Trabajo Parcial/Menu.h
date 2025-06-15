@@ -107,6 +107,7 @@ private:
     Cliente* user;
     Repartidor* repart;
     AVLTree<User> arbolUsuarios;
+	AVLTree<producto> arbol_historial;
     int nro_Productos = 5;
     int nro_Repartidores = 0;
     int nro_Carrito;
@@ -198,9 +199,24 @@ inline void Controlador::RegistrarProducto(int a)
 
 
 
-            cout << "Ordenar de mayor a menor? (0 = Si || 1 = No:\n";
-            cin >> menor;
-            quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+            int selecionOrdenar;
+            cout << "Ordenar de mayor a menor? (1) || Ver lo productos mas Baratos o Caros (2) \n";
+            cin >> selecionOrdenar;
+            switch (selecionOrdenar)
+            {
+            case 1:
+                cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+                cin >> menor;
+                quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+                break;
+            case 2:
+                cout << "Ver los productos mas baratos o Caros (0: Mas Caros || 1: Mas Baratos):\n";
+                cin >> menor; int indiceBaratosCaros;
+                cout << "Cuantos productos desea ver? (Ingrese un numero):\n"; cin >> indiceBaratosCaros;
+                ObtenerMasCoB(List_productos, menor, indiceBaratosCaros);
+                cout << "\nVolviendo a mostrar la lista...\n";
+            }
+
             for (int i = 0; i < List_productos->longitud(); i++)
             {
                 
@@ -327,10 +343,23 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario), i);
                 i++;
             }
-            ObtenerMasCoB(List_productos, false);
-            cout << "Ordenar de mayor a menor?:\n";
-            cin >> menor;
-            quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+            int selecionOrdenar;
+            cout << "Ordenar de mayor a menor? (1) || Ver lo productos mas Baratos o Caros (2) \n";
+            cin >> selecionOrdenar;
+            switch (selecionOrdenar)
+            {
+            case 1:
+                    cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+                    cin >> menor;
+                    quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+					break;
+            case 2:
+                    cout << "Ver los productos mas baratos o Caros (0: Mas Caros || 1: Mas Baratos):\n";
+					cin >> menor; int indiceBaratosCaros;
+					cout << "Cuantos productos desea ver? (Ingrese un numero):\n"; cin >> indiceBaratosCaros;
+					ObtenerMasCoB(List_productos, menor,indiceBaratosCaros);
+                    cout << "\nVolviendo a mostrar la lista...\n";
+            }
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -451,9 +480,23 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario),i);
                 i++;
             }
-            cout << "Ordenar de mayor a menor?:\n";
-            cin >> menor;
-            quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+            int selecionOrdenar;
+            cout << "Ordenar de mayor a menor? (1) || Ver lo productos mas Baratos o Caros (2) \n";
+            cin >> selecionOrdenar;
+            switch (selecionOrdenar)
+            {
+            case 1:
+                cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+                cin >> menor;
+                quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+                break;
+            case 2:
+                cout << "Ver los productos mas baratos o Caros (0: Mas Caros || 1: Mas Baratos):\n";
+                cin >> menor; int indiceBaratosCaros;
+                cout << "Cuantos productos desea ver? (Ingrese un numero):\n"; cin >> indiceBaratosCaros;
+                ObtenerMasCoB(List_productos, menor, indiceBaratosCaros);
+                cout << "\nVolviendo a mostrar la lista...\n";
+            }
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -624,11 +667,14 @@ bool Controlador::IniciarSesion() {
 
 inline void Controlador::Vercarrito()
 {
+    bool menor = false;
     int eliminar;
     int opccarito;
     cout << "- - - - - - - - - - - - - - - - - - - - - CARRITO - - - - - - - - - - - - - - - - - - -" << endl;
-    cout << "1.Terminar Pedido  || 2. Eliminar Pedido" << endl;
-    ordenarListaPorPrecio(List_Carrito);
+
+    cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+    cin >> menor;
+    mergeSort(List_Carrito, 0, List_Carrito->longitud() - 1, menor); // true: menor a mayor, false: mayor a menor
 
     for (int i = 0; i < List_Carrito->longitud(); i++)
     {
@@ -715,6 +761,7 @@ void Controlador::Menu()
     {
         switch (mainmenu)
         {
+
         case 1:
             if (IniciarSesion())
             {
@@ -740,7 +787,7 @@ void Controlador::Menu()
             break;
         }
 
-    } while (0<mainmenu<3);
+    } while (mainmenu != 3);
     
 }
 
@@ -756,8 +803,7 @@ inline void Controlador::InterfazUsuario()
         cout << "                                                          1.Pedir" << endl;
         cout << "                                                        2.Ver Carrito" << endl;
         cout << "                                                      3.Ver Mis Pedidos" << endl;
-        cout << "                                                      4.Ver los productos mas Caros/Baratos" << endl;
-        cout << "                                                      5.Ver Historial de compra" << endl;
+        cout << "                                                      4.Ver Historial de compra" << endl;
         cin >> interfaz;
         switch (interfaz)
         {
@@ -774,10 +820,8 @@ inline void Controlador::InterfazUsuario()
             PedidoRealizado();
             break;
         case 4:
-            break;
-        case 5:
-            system("cls");
             VerHistorial();
+            GenerarArbolBalanceado();
             break;
         default:
             break;
@@ -812,69 +856,56 @@ inline void Controlador::PedidoRealizado()
 
     double total = CalcularTotal(Cola_Repartidor, eleccionRepartidor, precio);
 
+    GuardarHistorial();
+
     cout << " EL TOTAL SERIA :" << total << endl;;
 }
 
 inline void Controlador::VerHistorial()
 {
-    int codigo, inventario, i = 0;
+    int codigo, inventario;
     string nombre;
     float precio;
     ifstream nomArch("historial_productos.txt", ios::in);
-    if (nomArch.is_open())
-    {
-        cout << "Lista de productos disponibles:\n";
-        cout << "----------------------------------\n";
 
+    Lista_Historial->eliminarTodo();
 
+    if (nomArch.is_open()) {
 
-        while (nomArch >> codigo >> nombre >> precio >> inventario)
-        {
-            Lista_Historial->agregaPos(new producto(codigo, nombre, precio, inventario), i);
+        int i = 0;
+        while (nomArch >> codigo >> nombre >> precio >> inventario) {
+            producto* p = new producto(codigo, nombre, precio, inventario);
+            Lista_Historial->agregaPos(p, i);
             i++;
         }
-
-        for (int j = 0; j < Lista_Historial->longitud(); j++)
-        {
-            Lista_Historial->obtenerPos(j)->toString();
-        }
-
         nomArch.close();
+
+        // Display products from the list
+        //for (int j = 0; j < Lista_Historial->longitud(); j++) {
+        //    Lista_Historial->obtenerPos(j)->toString();
+        //}
     }
-    else
-    {
+    else {
         cout << "No se pudo abrir el archivo historial_productos.txt\n";
     }
 }
 
+inline void Controlador::GenerarArbolBalanceado()
+{
+    if (Lista_Historial->esVacia()) {
+        cout << "El historial de productos está vacío. No se puede generar un árbol AVL." << endl;
+        return;
+    }
+    cout << "\n--- Generando Árbol AVL de Historial de Productos ---\n";
+    for (int i = 0; i < Lista_Historial->longitud(); ++i) {
+        producto* p = Lista_Historial->obtenerPos(i);
+        arbol_historial.insertar(p);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
+    cout << "Árbol AVL del historial de productos generado correctamente.\n";
+    cout << "\n--- Contenido del Árbol AVL (ordenado por nombre) ---\n";
+    arbol_historial.enOrden([](producto* p) {
+        cout << "  - " << p->getnombre() << " (ID: " << p->getid() << ", Precio: $" << p->getprecio() << ")\n";
+    });
+    cout << "-----------------------------------------------------\n";
+}

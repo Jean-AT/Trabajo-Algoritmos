@@ -20,7 +20,10 @@ public:
 	string getnombre();
 	double getprecio();
 	int getstock();
-
+	string getNombre()
+	{
+		return nombre;
+	}
 
 	void disminuir_stock(int num);
 	void toString()

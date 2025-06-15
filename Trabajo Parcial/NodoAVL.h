@@ -1,5 +1,4 @@
 #pragma once
-// Nodo para árbol AVL genérico
 
 template <typename T>
 class NodoAVL {
