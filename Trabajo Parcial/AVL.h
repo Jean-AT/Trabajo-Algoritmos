@@ -7,11 +7,11 @@ using namespace std;
 
 // Árbol AVL genérico
 template<typename T>
-class AVLTree
+class AVLArbol
 {
 public:
-    AVLTree();
-    ~AVLTree();
+    AVLArbol();
+    ~AVLArbol();
 
     void insertar(T* dato);
     template<typename Func>
@@ -36,33 +36,33 @@ private:
 // Implementación
 
 template<typename T>
-AVLTree<T>::AVLTree() : raiz(nullptr) {}
+AVLArbol<T>::AVLArbol() : raiz(nullptr) {}
 
 template<typename T>
-AVLTree<T>::~AVLTree() {
+AVLArbol<T>::~AVLArbol() {
     destruir(raiz);
 }
 
 template<typename T>
-void AVLTree<T>::insertar(T* dato) {
+void AVLArbol<T>::insertar(T* dato) {
     raiz = insertarRec(raiz, dato);
 }
 
 template<typename T>
-T* AVLTree<T>::buscar(const string& clave) {
+T* AVLArbol<T>::buscar(const string& clave) {
     return buscarRec(raiz, clave);
 }
 
 template<typename T>
 template<typename Func>
-void AVLTree<T>::enOrden(Func visitar) {
+void AVLArbol<T>::enOrden(Func visitar) {
     enOrdenRec(raiz, visitar);
 }
 
 // Métodos privados
 
 template<typename T>
-NodoAVL<T>* AVLTree<T>::insertarRec(NodoAVL<T>* nodo, T* dato) {
+NodoAVL<T>* AVLArbol<T>::insertarRec(NodoAVL<T>* nodo, T* dato) {
     if (!nodo)
         return new NodoAVL<T>(dato);
 
@@ -93,7 +93,7 @@ NodoAVL<T>* AVLTree<T>::insertarRec(NodoAVL<T>* nodo, T* dato) {
 }
 
 template<typename T>
-T* AVLTree<T>::buscarRec(NodoAVL<T>* nodo, const string& clave) {
+T* AVLArbol<T>::buscarRec(NodoAVL<T>* nodo, const string& clave) {
     if (!nodo) return nullptr;
     if (clave == nodo->dato->getNombre())
         return nodo->dato;
@@ -105,7 +105,7 @@ T* AVLTree<T>::buscarRec(NodoAVL<T>* nodo, const string& clave) {
 
 template<typename T>
 template<typename Func>
-void AVLTree<T>::enOrdenRec(NodoAVL<T>* nodo, Func visitar) {
+void AVLArbol<T>::enOrdenRec(NodoAVL<T>* nodo, Func visitar) {
     if (!nodo) return;
     enOrdenRec(nodo->izq, visitar);
     visitar(nodo->dato);
@@ -113,7 +113,7 @@ void AVLTree<T>::enOrdenRec(NodoAVL<T>* nodo, Func visitar) {
 }
 
 template<typename T>
-void AVLTree<T>::destruir(NodoAVL<T>* nodo) {
+void AVLArbol<T>::destruir(NodoAVL<T>* nodo) {
     if (!nodo) return;
     destruir(nodo->izq);
     destruir(nodo->der);
@@ -122,17 +122,17 @@ void AVLTree<T>::destruir(NodoAVL<T>* nodo) {
 }
 
 template<typename T>
-int AVLTree<T>::altura(NodoAVL<T>* nodo) {
+int AVLArbol<T>::altura(NodoAVL<T>* nodo) {
     return nodo ? nodo->altura : 0;
 }
 
 template<typename T>
-int AVLTree<T>::balance(NodoAVL<T>* nodo) {
+int AVLArbol<T>::balance(NodoAVL<T>* nodo) {
     return nodo ? altura(nodo->izq) - altura(nodo->der) : 0;
 }
 
 template<typename T>
-NodoAVL<T>* AVLTree<T>::rotarDerecha(NodoAVL<T>* y) {
+NodoAVL<T>* AVLArbol<T>::rotarDerecha(NodoAVL<T>* y) {
     NodoAVL<T>* x = y->izq;
     NodoAVL<T>* T2 = x->der;
     x->der = y;
@@ -143,7 +143,7 @@ NodoAVL<T>* AVLTree<T>::rotarDerecha(NodoAVL<T>* y) {
 }
 
 template<typename T>
-NodoAVL<T>* AVLTree<T>::rotarIzquierda(NodoAVL<T>* x) {
+NodoAVL<T>* AVLArbol<T>::rotarIzquierda(NodoAVL<T>* x) {
     NodoAVL<T>* y = x->der;
     NodoAVL<T>* T2 = y->izq;
     y->izq = x;
