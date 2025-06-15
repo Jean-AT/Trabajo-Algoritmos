@@ -1,13 +1,53 @@
-#include "Lista.h"
 #include "Cliente.h"
 #include "Repartidor.h"
-#include "producto.h"
 #include "Carrito.h"
 #include "Cola_.h"
+#include "Ordenamientos.h"
 #include <fstream>
 #include <iostream>
+#include "TablaHash.h"
 #include <string>
+#include "User.h"
+#include "AVL.h"
+#include "GestorUsuarios.h"
+#include <conio.h>
 //Hola
+void ordenarListaPorPrecio(Lista<producto*>* lista) {
+    if (lista->esVacia()) return;
+
+    bool cambio;
+    do {
+        cambio = false;
+        for (int i = 0; i < lista->longitud() - 1; i++) {
+            producto* prod1 = lista->obtenerPos(i);
+            producto* prod2 = lista->obtenerPos(i + 1);
+            if (prod1->getprecio() < prod2->getprecio()) {
+                lista->modificarPos(prod2, i);
+                lista->modificarPos(prod1, i + 1);
+                cambio = true;
+            }
+        }
+    } while (cambio);
+}
+
+string leerContrasena() {
+    string contrasena;
+    char ch;
+    while ((ch = _getch()) != '\r') { // '\r' es Enter
+        if (ch == '\b') { // Retroceso
+            if (!contrasena.empty()) {
+                contrasena.pop_back();
+                cout << "\b \b";
+            }
+        }
+        else {
+            contrasena += ch;
+            cout << '*';
+        }
+    }
+    cout << endl;
+    return contrasena;
+}
 
 
 class Controlador
@@ -21,79 +61,99 @@ public:
     //Funciones Para Cliente
     void RegistarCliente();
     void Vercarrito();
-    int CalcularTotal(int selecRepartidor, int precio) {
-        if (selecRepartidor == 0)
-            return precio;
-        else
-            return 1 + CalcularTotal(precio, selecRepartidor - 1);
-    }
+	//Funciones de usuario
+    void RegistrarUsuario();
+    bool IniciarSesion();
     //Funciones Main
     void Menu();
     void InterfazUsuario();
     void PedidoRealizado();
+
+    double CalcularTotal(Cola<Repartidor*>* Cola_Repartidor, int indx, double precio, int i = 0) {
+        if (i == indx) {
+            return precio + Cola_Repartidor->obtenerPos(indx)->gettarifa();
+        }
+
+        return CalcularTotal(Cola_Repartidor, indx, precio, i + 1);
+    }
+    void GuardarHistorial() {
+        ofstream archivo("historial_Productos.txt", ios::app);
+        if (archivo.is_open()) {
+            for (int i = 0; i < List_Carrito->longitud(); i++) {
+                archivo << List_Carrito->obtenerPos(i)->getid() << " "
+                    << List_Carrito->obtenerPos(i)->getnombre() << " "
+                    << List_Carrito->obtenerPos(i)->getprecio() << " "
+                    << List_Carrito->obtenerPos(i)->getstock() << endl;
+            }
+            archivo.close();
+        }
+        else {
+            cout << "No se pudo abrir el archivo de historial." << endl;
+        }
+    }
+    void VerHistorial();
+
+    void GenerarArbolBalanceado();
 private:
     Lista<producto*>* List_Comida;
     Lista<producto*>* List_Salud;
     Lista<producto*>* List_Bebidas;
-    Cola<Repartidor*>* List_Repartidor;
+    Cola<Repartidor*>* Cola_Repartidor;
     Lista<producto*>* List_Carrito;
     Lista<producto*>* List_productos;
     Cola<producto*>* Cola_resumen;
-    Cliente* user;
+    Lista<producto*>* Lista_Historial;
 
+    Cliente* user;
+    Repartidor* repart;
+    AVLTree<User> arbolUsuarios;
+	AVLTree<producto> arbol_historial;
     int nro_Productos = 5;
-    int nro_Repartidores = 5;
+    int nro_Repartidores = 0;
     int nro_Carrito;
     int eleccionRepartidor;
 };
 
 inline Controlador::Controlador()
 {
+    srand(time(0));
     List_Bebidas = new Lista<producto*>();
     List_Carrito = new Lista<producto*>();
     List_Comida = new Lista<producto*>();
     List_Salud = new Lista<producto*>();
-    List_Repartidor = new Cola<Repartidor*>();
+    Cola_Repartidor = new Cola<Repartidor*>();
     List_productos = new Lista<producto*>();
     Cola_resumen = new Cola<producto*>();
+    Lista_Historial = new Lista<producto*>();
 
-    Repartidor* nro1 = new Repartidor(2, "Jose");
-    Repartidor* nro2 = new Repartidor(1, "Luis");
-    Repartidor* nro3 = new Repartidor(3, "Armando");
-    Repartidor* nro4 = new Repartidor(2, "Sebastian");
-    Repartidor* nro5 = new Repartidor(1, "Oscar");
-    Repartidor* nro6 = new Repartidor(3, "Juan");
-    Repartidor* nro7 = new Repartidor(2, "Tommy");
-    Repartidor* nro8 = new Repartidor(2, "Nilton");
-    Repartidor* nro9 = new Repartidor(3, "Cesar");
-    Repartidor* nro10 = new Repartidor(1, "Matheo");
+    for (int i = 0; i < 5; i++)
+    {
+        repart = new Repartidor(nro_Repartidores);
+        Cola_Repartidor->encolar(repart);
+        nro_Repartidores++;
+    }
 
-    List_Repartidor->encolar(nro1);
-    List_Repartidor->encolar(nro2);
-    List_Repartidor->encolar(nro3);
-    List_Repartidor->encolar(nro4);
-    List_Repartidor->encolar(nro10);
-    List_Repartidor->encolar(nro5);
-    List_Repartidor->encolar(nro6);
-    List_Repartidor->encolar(nro7);
-    List_Repartidor->encolar(nro8);
-    List_Repartidor->encolar(nro9);
+    cargarUsuariosDesdeArchivo(arbolUsuarios, "usuarios.txt");
 }
 
 inline void Controlador::ListarRepartidores()
 {
     cout << "- - - - - - - - - - - - - - - - - - - LISTA DE REPARTIDORES - - - - - - - - - - - - - - - - - - - - -" << endl;
-
-    Repartidor* repar;
-    do
+	Cola<Repartidor*>* temp_Cola = new Cola<Repartidor*>();//Cola temporal para almacenar repartidores
+	// Mostrar repartidores y almacenarlos en la cola temporal
+    while (!Cola_Repartidor->esVacia())
     {
-        repar = List_Repartidor->desencolar();
-        repar->toString();
-    } while (!List_Repartidor->esVacia());
+        Repartidor* repar = Cola_Repartidor->desencolar();
+        repar->MostrarTdo();
+        temp_Cola->encolar(repar);
+    }
+	// Reinsertar repartidores en la cola original
+    while (!temp_Cola->esVacia()) {
+        Cola_Repartidor->encolar(temp_Cola->desencolar());
+    }
+    delete temp_Cola; //Se eliminar la cola temp
 
     cout << endl << "Elije a tu repartidor:"; cin >> eleccionRepartidor;
-
-    
 }
 
 inline void Controlador::RegistrarProducto(int a)
@@ -103,10 +163,12 @@ inline void Controlador::RegistrarProducto(int a)
     int codigo, codigoBuscado, inventario;
     string nombre;
     float precio;
-    
+    bool menor;
+    int stockelegido = 0;
     bool encontrado = false;
     ifstream nomArch;
     ofstream tempArch;
+    string nombreBuscar;
     cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE PRODUCTOS - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
     cout << "                                                         1.Comida" << endl;
     cout << "                                                         2.Salud" << endl;
@@ -121,7 +183,6 @@ inline void Controlador::RegistrarProducto(int a)
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE COMIDA - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl;
-        cout << "1.Ordenar  || 2.Agregar al carrito" << endl;
         //ACA VA LA LISTAR SALUD
         nomArch.open("productos_Comida.txt", ios::in);
         if (nomArch.is_open())
@@ -135,17 +196,83 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario),i);
                 i++;
             }
-            List_Carrito->ordenar([](producto* a, producto* b) {
-                return a->getprecio() < b->getprecio();
-                });
-            List_productos->foreach([](producto* p) { p->toString(); });//lambda
 
+
+
+            int selecionOrdenar;
+            cout << "Ordenar de mayor a menor? (1) || Ver lo productos mas Baratos o Caros (2) \n";
+            cin >> selecionOrdenar;
+            switch (selecionOrdenar)
+            {
+            case 1:
+                cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+                cin >> menor;
+                quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+                break;
+            case 2:
+                cout << "Ver los productos mas baratos o Caros (0: Mas Caros || 1: Mas Baratos):\n";
+                cin >> menor; int indiceBaratosCaros;
+                cout << "Cuantos productos desea ver? (Ingrese un numero):\n"; cin >> indiceBaratosCaros;
+                ObtenerMasCoB(List_productos, menor, indiceBaratosCaros);
+                cout << "\nVolviendo a mostrar la lista...\n";
+            }
+
+            for (int i = 0; i < List_productos->longitud(); i++)
+            {
+                
+                List_productos->obtenerPos(i)->toString();
+            }
             nomArch.close();
 
-            cout << "\nIngrese el cÃ³digo del producto que desea seleccionar: ";
-            cin >> codigoBuscado;
 
-            // Leer y actualizar inventario
+
+            //--HAST TABLE DE PRODUCTOS
+            
+            HashTablaString* ht = new HashTablaString(100);
+            for (int i = 0; i < List_productos->longitud(); i++)
+            {
+                ht->insertar(List_productos->obtenerPos(i)->getnombre(), List_productos->obtenerPos(i));
+                
+
+			}
+
+            
+            while (true)
+            {
+                cout << "Desea ingresar un producto por nombre? (1 = Si || 0 = No): ";
+                cin >> menor;
+                if (menor == 1)
+                {
+                    std::cout << "\nBuscar nombre: ";
+                    std::cin >> nombreBuscar;
+
+                    int index = ht->buscar(nombreBuscar);
+                    if (index != -1)
+                        std::cout << nombreBuscar << " se encuentra en la posicion " << index << std::endl;
+                    else
+                        std::cout << nombreBuscar << " no se encontro en la tabla." << std::endl;
+
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+            delete ht;
+
+
+
+
+
+
+            //-----------------------
+
+            cout << "\nIngrese el código del producto que desea seleccionar: ";
+            cin >> codigoBuscado;
+            cout << "Ingrese la cantidad de stock que desea: ";
+            cin >> stockelegido;
+            // Leer y actualizar inventario 
             nomArch.open("productos_Comida.txt", ios::in);
             tempArch.open("temp.txt", ios::out);
 
@@ -157,9 +284,9 @@ inline void Controlador::RegistrarProducto(int a)
                 {
                     if (List_productos->obtenerPos(i)->getstock() > 0)
                     {
-                        List_productos->obtenerPos(i)->disminuir_stock();
+                        List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
-                        cout << "CÃ³digo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "Código: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -187,7 +314,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con cÃ³digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con código " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -203,7 +330,6 @@ inline void Controlador::RegistrarProducto(int a)
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE SALUD - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl;
-        cout << "1.Ordenar  || 2.Agregar al carrito" << endl;
         //ACA VA LA LISTAR SALUD
         nomArch.open("productos_Salud.txt", ios::in);
         if (nomArch.is_open())
@@ -217,9 +343,23 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario), i);
                 i++;
             }
-            List_Carrito->ordenar([](producto* a, producto* b) {
-                return a->getprecio() < b->getprecio();
-                });
+            int selecionOrdenar;
+            cout << "Ordenar de mayor a menor? (1) || Ver lo productos mas Baratos o Caros (2) \n";
+            cin >> selecionOrdenar;
+            switch (selecionOrdenar)
+            {
+            case 1:
+                    cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+                    cin >> menor;
+                    quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+					break;
+            case 2:
+                    cout << "Ver los productos mas baratos o Caros (0: Mas Caros || 1: Mas Baratos):\n";
+					cin >> menor; int indiceBaratosCaros;
+					cout << "Cuantos productos desea ver? (Ingrese un numero):\n"; cin >> indiceBaratosCaros;
+					ObtenerMasCoB(List_productos, menor,indiceBaratosCaros);
+                    cout << "\nVolviendo a mostrar la lista...\n";
+            }
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -228,9 +368,49 @@ inline void Controlador::RegistrarProducto(int a)
             }
             nomArch.close();
 
-            cout << "\nIngrese el cÃ³digo del producto que desea seleccionar: ";
-            cin >> codigoBuscado;
 
+
+            //--HAST TABLE DE PRODUCTOS
+
+            HashTablaString* ht = new HashTablaString(100);
+            for (int i = 0; i < List_productos->longitud(); i++)
+            {
+                ht->insertar(List_productos->obtenerPos(i)->getnombre(), List_productos->obtenerPos(i));
+
+
+            }
+
+
+            while (true)
+            {
+                cout << "Desea ingresar un producto por nombre? (1 = Si || 0 = No): ";
+                cin >> menor;
+                if (menor == 1)
+                {
+                    std::cout << "\nBuscar nombre: ";
+                    std::cin >> nombreBuscar;
+
+                    int index = ht->buscar(nombreBuscar);
+                    if (index != -1)
+                        std::cout << nombreBuscar << " se encuentra en la posicion " << index << std::endl;
+                    else
+                        std::cout << nombreBuscar << " no se encontro en la tabla." << std::endl;
+
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+            delete ht;
+
+
+
+            cout << "\nIngrese el código del producto que desea seleccionar: ";
+            cin >> codigoBuscado;
+            cout << "Ingrese la cantidad de stock que desea: ";
+            cin >> stockelegido;
             // Leer y actualizar inventario
             nomArch.open("productos_Salud.txt", ios::in);
             tempArch.open("temp.txt", ios::out);
@@ -243,9 +423,9 @@ inline void Controlador::RegistrarProducto(int a)
                 {
                     if (List_productos->obtenerPos(i)->getstock() > 0)
                     {
-                        List_productos->obtenerPos(i)->disminuir_stock();
+                        List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
-                        cout << "CÃ³digo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "Código: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -272,7 +452,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con cÃ³digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con código " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -287,7 +467,6 @@ inline void Controlador::RegistrarProducto(int a)
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE BEBIDAS - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl;
-        cout << "1.Ordenar  || 2.Agregar al carrito" << endl;
         //ACA VA LA LISTAR SALUD
         nomArch.open("productos_Bebidas.txt", ios::in);
         if (nomArch.is_open())
@@ -301,9 +480,23 @@ inline void Controlador::RegistrarProducto(int a)
                 List_productos->agregaPos(new producto(codigo, nombre, precio, inventario),i);
                 i++;
             }
-            List_Carrito->ordenar([](producto* a, producto* b) {
-                return a->getprecio() < b->getprecio();
-                });
+            int selecionOrdenar;
+            cout << "Ordenar de mayor a menor? (1) || Ver lo productos mas Baratos o Caros (2) \n";
+            cin >> selecionOrdenar;
+            switch (selecionOrdenar)
+            {
+            case 1:
+                cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+                cin >> menor;
+                quicksort(List_productos, 0, List_productos->longitud() - 1, menor);
+                break;
+            case 2:
+                cout << "Ver los productos mas baratos o Caros (0: Mas Caros || 1: Mas Baratos):\n";
+                cin >> menor; int indiceBaratosCaros;
+                cout << "Cuantos productos desea ver? (Ingrese un numero):\n"; cin >> indiceBaratosCaros;
+                ObtenerMasCoB(List_productos, menor, indiceBaratosCaros);
+                cout << "\nVolviendo a mostrar la lista...\n";
+            }
 
             for (int i = 0; i < List_productos->longitud(); i++)
             {
@@ -312,9 +505,57 @@ inline void Controlador::RegistrarProducto(int a)
             }
             nomArch.close();
 
-            cout << "\nIngrese el cÃ³digo del producto que desea seleccionar: ";
-            cin >> codigoBuscado;
+            
 
+
+            //--HAST TABLE DE PRODUCTOS
+
+            HashTablaString* ht = new HashTablaString(100);
+            for (int i = 0; i < List_productos->longitud(); i++)
+            {
+                ht->insertar(List_productos->obtenerPos(i)->getnombre(), List_productos->obtenerPos(i));
+
+
+            }
+
+            //ht->imprimir();
+
+            while (true)
+            {
+                cout << "Desea ingresar un producto por nombre? (1 = Si || 0 = No): ";
+                cin >> menor;
+                if (menor == 1)
+                {
+                    std::cout << "\nBuscar nombre: ";
+                    std::cin >> nombreBuscar;
+
+                    int index = ht->buscar(nombreBuscar);
+                    if (index != -1)
+                        std::cout << nombreBuscar << " se encuentra en la posicion " << index << std::endl;
+                    else
+                        std::cout << nombreBuscar << " no se encontro en la tabla." << std::endl;
+
+                    
+                }
+                else
+                {
+                    break;
+                }
+            }
+			delete ht; // Liberar memoria de la tabla hash
+
+            //
+            
+
+
+
+
+            
+
+            cout << "\nIngrese el código del producto que desea seleccionar: ";
+            cin >> codigoBuscado;
+            cout << "Ingrese la cantidad de stock que desea: ";
+            cin >> stockelegido;
             // Leer y actualizar inventario
             nomArch.open("productos_Bebidas.txt", ios::in);
             tempArch.open("temp.txt", ios::out);
@@ -327,9 +568,9 @@ inline void Controlador::RegistrarProducto(int a)
                 {
                     if (List_productos->obtenerPos(i)->getstock() > 0)
                     {
-                        List_productos->obtenerPos(i)->disminuir_stock();
+                        List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
-                        cout << "CÃ³digo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "Código: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -356,7 +597,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con cÃ³digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con código " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -370,12 +611,12 @@ inline void Controlador::RegistrarProducto(int a)
 
 inline void Controlador::RegistarCliente()
 {
-    string Correo, contraseÃ±a, nombre;
+    string Correo, contraseña, nombre;
     int telefono;
     string distrito;
     cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - REGISTRO DE USUARIO - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
     cout << "Ingrese su correo :"; cin >> Correo;
-    cout << "Ingrese su contraseÃ±a :"; cin >> contraseÃ±a;
+    cout << "Ingrese su contraseña :"; cin >> contraseña;
     cout << "Ingrese su nombre:"; cin >> nombre;
     cout << "Ingrese su numero de telefono :"; cin >> telefono;
     cout << "Ingrese su distrito :" << endl;
@@ -386,15 +627,54 @@ inline void Controlador::RegistarCliente()
     Cliente* user = new Cliente(nombre, telefono, distrito, Correo);
 }
 
+inline void Controlador::RegistrarUsuario() {
+    string nombre, correo, contraseña, distrito;
+    int telefono;
+    cout << "Nombre: "; cin >> nombre;
+    cout << "Telefono: "; cin >> telefono;
+    cout << "Distrito: "; cin >> distrito;
+    cout << "Correo: "; cin >> correo;
+    cout << "Contraseña: "; cin >> contraseña;
+
+    // Verifica si ya existe el usuario
+    if (arbolUsuarios.buscar(nombre) != nullptr) {
+        cout << "El usuario ya existe." << endl;
+        return;
+    }
+
+    User* nuevo = new User(nombre, telefono, distrito, correo, contraseña);
+    arbolUsuarios.insertar(nuevo);
+    guardarUsuariosEnArchivo(arbolUsuarios, "usuarios.txt");
+    cout << "Usuario registrado correctamente." << endl;
+}
+
+bool Controlador::IniciarSesion() {
+    string nombre, contraseña;
+    cout << "Nombre: "; cin >> nombre;
+    cout << "Contraseña: ";
+    contraseña = leerContrasena(); // Aquí se oculta la contraseña con asteriscos
+
+    User* usuario = arbolUsuarios.buscar(nombre);
+    if (usuario && usuario->getContraseña() == contraseña) {
+        cout << "¡Bienvenido, " << usuario->getNombre() << "!" << endl;
+        return true;
+    }
+    else {
+        cout << "Usuario o contraseña incorrectos." << endl;
+        return false;
+    }
+}
+
 inline void Controlador::Vercarrito()
 {
+    bool menor = false;
     int eliminar;
     int opccarito;
     cout << "- - - - - - - - - - - - - - - - - - - - - CARRITO - - - - - - - - - - - - - - - - - - -" << endl;
-    cout << "1.Terminar Pedido  || 2. Eliminar Pedido" << endl;
-	List_Carrito->ordenar([](producto* a, producto* b) {
-		return a->getprecio() < b->getprecio();
-		});
+
+    cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
+    cin >> menor;
+    mergeSort(List_Carrito, 0, List_Carrito->longitud() - 1, menor); // true: menor a mayor, false: mayor a menor
 
     for (int i = 0; i < List_Carrito->longitud(); i++)
     {
@@ -432,11 +712,17 @@ inline void Controlador::Vercarrito()
 
     case 2:
 
-        cout << "Ingrese el cÃ³digo del producto a eliminar: "; cin >> eliminar;
+        cout << "Ingrese el código del producto a eliminar: "; cin >> eliminar;
 
 
-        List_Carrito->removeIf([eliminar](producto* p) { return p->getid() == eliminar; });//lambda
-
+        for (int i = 0; i < List_Carrito->longitud(); i++)
+        {
+            if (List_Carrito->obtenerPos(i)->getid() == eliminar)
+            {
+                List_Carrito->eliminaPos(i);
+            }
+            
+        }
 
         break;
     default:
@@ -466,23 +752,34 @@ void Controlador::Menu()
     cout << "                                                                                                                     " << endl;
 
     cout << "                                                  Llevalo" << endl << endl << endl;
-    cout << "                                            1.Ingresar Sesion" << endl;
-    cout << "                                                  2.Salir" << endl;
+    cout << "                                             1.Ingresar Sesion" << endl;
+    cout << "                                         2.Registrar Nuevo Usuario" << endl;
+    cout << "                                                  3.Salir" << endl;
 
     cin >> mainmenu;
     do
     {
         switch (mainmenu)
         {
-        case 1:
 
-            system("cls");
-            RegistarCliente();
-            system("cls");
-            InterfazUsuario();
+        case 1:
+            if (IniciarSesion())
+            {
+                InterfazUsuario();
+            }
+            break;
+        case 2:
+
+			RegistrarUsuario();
             break;
 
-        case 2:
+        case 3:
+            List_Bebidas = nullptr;
+            List_Carrito = nullptr;
+            List_Comida = nullptr;
+            List_productos = nullptr;
+            Cola_Repartidor = nullptr;
+            List_Salud = nullptr;
             exit(0);
             break;
         default:
@@ -490,14 +787,14 @@ void Controlador::Menu()
             break;
         }
 
-    } while (0<mainmenu<3);
+    } while (mainmenu != 3);
     
 }
 
 inline void Controlador::InterfazUsuario()
 {
-    int a=0;
-    
+    int a = 0;
+
     int interfaz;
     do
     {
@@ -506,6 +803,7 @@ inline void Controlador::InterfazUsuario()
         cout << "                                                          1.Pedir" << endl;
         cout << "                                                        2.Ver Carrito" << endl;
         cout << "                                                      3.Ver Mis Pedidos" << endl;
+        cout << "                                                      4.Ver Historial de compra" << endl;
         cin >> interfaz;
         switch (interfaz)
         {
@@ -521,19 +819,23 @@ inline void Controlador::InterfazUsuario()
         case 3:
             PedidoRealizado();
             break;
+        case 4:
+            VerHistorial();
+            GenerarArbolBalanceado();
+            break;
         default:
             break;
         }
 
-    } while (0<interfaz<3);
-    
+    } while (0 < interfaz < 3);
+
 }
 
 inline void Controlador::PedidoRealizado()
 {
     system("cls");
 
-    int total= 0;
+    double precio= 0.0;
     cout << "- - - - - - - - - - - - - - - - - - - - - PEDIDOS REALIZADOS - - - - - - - - - - - - -" << endl;
     cout << "Resumen del pedido: " << endl;
 
@@ -541,7 +843,7 @@ inline void Controlador::PedidoRealizado()
     {
         Cola_resumen->encolar(new producto(List_Carrito->obtenerPos(i)->getid(),
             List_Carrito->obtenerPos(i)->getnombre(), List_Carrito->obtenerPos(i)->getprecio(), List_Carrito->obtenerPos(i)->getstock()));
-        total += List_Carrito->obtenerPos(i)->getprecio();
+        precio += List_Carrito->obtenerPos(i)->getprecio();
         
     }
     producto* Producto;
@@ -551,8 +853,59 @@ inline void Controlador::PedidoRealizado()
         Producto->toString();
 
     } while (!Cola_resumen->esVacia());
-    cout << " EL TOTAL SERIA :" << CalcularTotal(1, total) << endl;;
+
+    double total = CalcularTotal(Cola_Repartidor, eleccionRepartidor, precio);
+
+    GuardarHistorial();
+
+    cout << " EL TOTAL SERIA :" << total << endl;;
 }
 
+inline void Controlador::VerHistorial()
+{
+    int codigo, inventario;
+    string nombre;
+    float precio;
+    ifstream nomArch("historial_productos.txt", ios::in);
 
- 
+    Lista_Historial->eliminarTodo();
+
+    if (nomArch.is_open()) {
+
+        int i = 0;
+        while (nomArch >> codigo >> nombre >> precio >> inventario) {
+            producto* p = new producto(codigo, nombre, precio, inventario);
+            Lista_Historial->agregaPos(p, i);
+            i++;
+        }
+        nomArch.close();
+
+        // Display products from the list
+        //for (int j = 0; j < Lista_Historial->longitud(); j++) {
+        //    Lista_Historial->obtenerPos(j)->toString();
+        //}
+    }
+    else {
+        cout << "No se pudo abrir el archivo historial_productos.txt\n";
+    }
+}
+
+inline void Controlador::GenerarArbolBalanceado()
+{
+    if (Lista_Historial->esVacia()) {
+        cout << "El historial de productos está vacío. No se puede generar un árbol AVL." << endl;
+        return;
+    }
+    cout << "\n--- Generando Árbol AVL de Historial de Productos ---\n";
+    for (int i = 0; i < Lista_Historial->longitud(); ++i) {
+        producto* p = Lista_Historial->obtenerPos(i);
+        arbol_historial.insertar(p);
+
+    }
+    cout << "Árbol AVL del historial de productos generado correctamente.\n";
+    cout << "\n--- Contenido del Árbol AVL (ordenado por nombre) ---\n";
+    arbol_historial.enOrden([](producto* p) {
+        cout << "  - " << p->getnombre() << " (ID: " << p->getid() << ", Precio: $" << p->getprecio() << ")\n";
+    });
+    cout << "-----------------------------------------------------\n";
+}

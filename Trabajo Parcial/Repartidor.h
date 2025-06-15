@@ -1,57 +1,57 @@
 #pragma once
 #include "User.h"
+#include <vector>
+
+vector<string> distritos = { "San Miguel","Barranco","Jesus Maria" };
+vector<string> nombres = {
+	"Valentina", "Mateo", "Sofía", "Sebastián", "Isabella",
+	"Lucas", "Camila", "Santiago", "Emma", "Tomás",
+	"Martina", "Diego", "Victoria", "Gabriel", "Renata",
+	"Emilio", "Antonella", "Daniel", "Lucía", "Andrés"
+};
+
 
 class Repartidor
 {
 public:
-	Repartidor(int pdistrito, string nnombre);
+	Repartidor(int id);//CONSTRUCTOR
+
+	//FUNCIONES DE CALCULO Y MOSTRAR
 	void MostrarTdo();
-	string getdistrito() {
-		if (distrito == 1)
-		{
-			return "San Miguel";
-		}if (distrito == 2)
-		{
-			return "Barranco";
-		}
-		else
-		{
-			return "Jesus Maria";
-		}
-	};
-	void CalcularTarifa();
+
+	//FUNCIONES GET
+	string getdistrito() { return distrito; };
+	int getCalificacion() { return calificacion; }
 	string getnombre() { return nombre; };
 	double gettarifa() { return tarifa; };
-	void toString()
-	{
-		CalcularTarifa();
-		cout << "Nombre: " << nombre << " | Precio: " << tarifa << " | Distrito: " << getdistrito() << endl;
-	}
+	int getId() { return id; }
+
 private:
-	int distrito;
+	string distrito;
 	string nombre;
 	double tarifa;
+	int calificacion;
+	int id;
 };
 
-inline Repartidor::Repartidor(int pdistrito, string nnombre) {
+inline Repartidor::Repartidor(int ide) {
 
-	distrito = pdistrito;
-	nombre = nnombre;
+	int idxDistrito = rand() % distritos.size();
+	int idxNombre = rand() % nombres.size();
+
+	distrito = distritos[idxDistrito];
+	nombre = nombres[idxNombre];
+	calificacion = rand() % 10 + 1;
+	tarifa = (rand() % 500 + 70) / 100.0;
+	id = ide;
 }
 
 void Repartidor::MostrarTdo()
 {
-	cout << "------------- Repartidor " << nombre << "----------- " << endl;
+	cout << "\n------------- Repartidor " << getnombre() << "-----------\n " ;
+	cout << "\n - ID: " << getId();
+	cout << "\n - Distrito: " << getdistrito();
+	cout << "\n - Calificacion: " << getCalificacion();
+	cout << "\n - Tarifa: " << gettarifa();
 
-}
-
-inline void Repartidor::CalcularTarifa()
-{
-	switch (distrito)
-	{
-	case 1:tarifa = 1.50; break;
-	case 2:tarifa = 1.30; break;
-	case 3:tarifa = 1.10; break;
-	default:break;
-	}
 }
