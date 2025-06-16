@@ -180,6 +180,7 @@ inline void Controlador::RegistrarProducto(int a)
     {
     case 1:
         i = 0;
+        system("cls");
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE COMIDA - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl;
@@ -325,7 +326,7 @@ inline void Controlador::RegistrarProducto(int a)
         break;
 
     case 2:
-
+        system("cls");
         i = 0;
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE SALUD - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -462,7 +463,7 @@ inline void Controlador::RegistrarProducto(int a)
         
         break;
     case 3:
-
+        system("cls");
         i = 0;
         List_productos->eliminarTodo();
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - SECCIONES DE BEBIDAS - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
@@ -670,6 +671,12 @@ inline void Controlador::Vercarrito()
     bool menor = false;
     int eliminar;
     int opccarito;
+    if (List_Carrito == nullptr || List_Carrito->longitud() == 0) {
+        cout << "El carrito está vacío." << endl;
+		system("pause");
+        return;
+	}
+    
     cout << "- - - - - - - - - - - - - - - - - - - - - CARRITO - - - - - - - - - - - - - - - - - - -" << endl;
 
     cout << "Ordenar de mayor a menor(0: Mayor A Menor || 1: Menor a Mayor):\n";
@@ -680,6 +687,7 @@ inline void Controlador::Vercarrito()
     {
         List_Carrito->obtenerPos(i)->toString();
     }
+    cout << "1: Elegir repartidor || 2:Eliminar Producto\n";
     cin >> opccarito;
     switch (opccarito)
     {
@@ -702,7 +710,7 @@ inline void Controlador::Vercarrito()
         } while (!Cola_resumen->esVacia());
 
         ListarRepartidores();
-
+        system("pause");
         break;
         
         
@@ -725,6 +733,7 @@ inline void Controlador::Vercarrito()
         }
 
         break;
+        system("pause");
     default:
         break;
     }
@@ -798,12 +807,14 @@ inline void Controlador::InterfazUsuario()
     int interfaz;
     do
     {
+        system("cls");
         cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - BIENVENIDO  - - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
         cout << endl << endl << endl << endl << endl;
         cout << "                                                          1.Pedir" << endl;
         cout << "                                                        2.Ver Carrito" << endl;
         cout << "                                                      3.Ver Mis Pedidos" << endl;
         cout << "                                                      4.Ver Historial de compra" << endl;
+        cout << "                                                          5.Salir" << endl;
         cin >> interfaz;
         switch (interfaz)
         {
@@ -823,6 +834,9 @@ inline void Controlador::InterfazUsuario()
             VerHistorial();
             GenerarArbolBalanceado();
             break;
+        case 5:
+            cout << "\nSaliendo del programa..";
+            exit(0);
         default:
             break;
         }
@@ -834,6 +848,13 @@ inline void Controlador::InterfazUsuario()
 inline void Controlador::PedidoRealizado()
 {
     system("cls");
+
+    if (List_Carrito->esVacia())
+    {
+        cout << "No hay productos en el carrito." << endl;
+        system("pause");
+        return;
+	}
 
     double precio= 0.0;
     cout << "- - - - - - - - - - - - - - - - - - - - - PEDIDOS REALIZADOS - - - - - - - - - - - - -" << endl;
@@ -859,10 +880,12 @@ inline void Controlador::PedidoRealizado()
     GuardarHistorial();
 
     cout << " EL TOTAL SERIA :" << total << endl;;
+    system("pause");
 }
 
 inline void Controlador::VerHistorial()
 {
+    system("cls");
     int codigo, inventario;
     string nombre;
     float precio;
@@ -888,6 +911,7 @@ inline void Controlador::VerHistorial()
     else {
         cout << "No se pudo abrir el archivo historial_productos.txt\n";
     }
+    system("pause");
 }
 
 inline void Controlador::GenerarArbolBalanceado()
@@ -908,4 +932,5 @@ inline void Controlador::GenerarArbolBalanceado()
         cout << "  - " << p->getnombre() << " (ID: " << p->getid() << ", Precio: $" << p->getprecio() << ")\n";
     });
     cout << "-----------------------------------------------------\n";
+    system("pause");
 }
