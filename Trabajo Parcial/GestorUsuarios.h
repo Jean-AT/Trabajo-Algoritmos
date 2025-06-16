@@ -7,7 +7,7 @@
 using namespace std;
 
 // Guarda todos los usuarios del arbol en el archivo
-inline void guardarUsuariosEnArchivo(AVLTree<User>& arbol, const string& filename) {
+inline void guardarUsuariosEnArchivo(AVLArbol<User>& arbol, const string& filename) {
     ofstream archivo(filename, ios::trunc);
     if (!archivo.is_open()) return;
 
@@ -19,7 +19,7 @@ inline void guardarUsuariosEnArchivo(AVLTree<User>& arbol, const string& filenam
 }
 
 // Carga todos los usuarios del archivo y los inserta en el arbol
-inline void cargarUsuariosDesdeArchivo(AVLTree<User>& arbol, const string& filename) {
+inline void cargarUsuariosDesdeArchivo(AVLArbol<User>& arbol, const string& filename) {
     ifstream archivo(filename);
     string linea;
     while (getline(archivo, linea)) {
