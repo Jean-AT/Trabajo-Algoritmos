@@ -106,8 +106,8 @@ private:
 
     Cliente* user;
     Repartidor* repart;
-    AVLTree<User> arbolUsuarios;
-	AVLTree<producto> arbol_historial;
+    AVLArbol<User> arbolUsuarios;
+    AVLArbol<producto> arbol_historial;
     int nro_Productos = 5;
     int nro_Repartidores = 0;
     int nro_Carrito;
