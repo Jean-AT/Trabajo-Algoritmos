@@ -1,4 +1,4 @@
-#include "Cliente.h"
+Ôªø#include "Cliente.h"
 #include "Repartidor.h"
 #include "Carrito.h"
 #include "Cola_.h"
@@ -11,6 +11,8 @@
 #include "AVL.h"
 #include "GestorUsuarios.h"
 #include <conio.h>
+User* usuario = nullptr; // Variable global para el usuario actual;
+CGrafo<int>* G = new CGrafo<int>();
 //Hola
 void ordenarListaPorPrecio(Lista<producto*>* lista) {
     if (lista->esVacia()) return;
@@ -71,6 +73,12 @@ public:
 
     double CalcularTotal(Cola<Repartidor*>* Cola_Repartidor, int indx, double precio, int i = 0) {
         if (i == indx) {
+
+
+
+            
+            
+
             return precio + Cola_Repartidor->obtenerPos(indx)->gettarifa();
         }
 
@@ -131,6 +139,10 @@ inline Controlador::Controlador()
         repart = new Repartidor(nro_Repartidores);
         Cola_Repartidor->encolar(repart);
         nro_Repartidores++;
+
+
+
+        
     }
 
     cargarUsuariosDesdeArchivo(arbolUsuarios, "usuarios.txt");
@@ -138,12 +150,106 @@ inline Controlador::Controlador()
 
 inline void Controlador::ListarRepartidores()
 {
+    //
+
+    G->adicionarVertice(0); //indice=0 SM
+    G->adicionarVertice(1); //indice=1 bARRANCO
+    G->adicionarVertice(2); //indice=2 JESUS MARIA
+    
+
+    //Agregar los arcos
+    G->adicionarArco(0, 0); //indice=0
+    G->modificarArco(0, 0, 0);
+    G->adicionarArco(0, 1);//indice=1
+    G->modificarArco(0, 1, 12);
+    G->adicionarArco(0, 2);//indice=1
+    G->modificarArco(0, 2, 13);
+
+    G->adicionarArco(1, 0); //indice=0
+    G->modificarArco(1, 0, 22);
+    G->adicionarArco(1, 1);//indice=1
+    G->modificarArco(1, 1, 0);
+    G->adicionarArco(1, 2);//indice=1
+    G->modificarArco(1, 2, 23);
+
+
+    G->adicionarArco(2, 0); //indice=0
+    G->modificarArco(2, 0, 34);
+    G->adicionarArco(2, 1);//indice=1
+    G->modificarArco(2, 1, 54);
+    G->adicionarArco(2, 2);//indice=1
+    G->modificarArco(2, 2, 0);
+
+
+
+    int in;
+    int on;
+
+    //Imprimir los v√©rtices con sus arcos
+    for (int i = 0; i < G->cantidadVertices(); ++i) {
+        cout << "Vertice : " << G->obtenerVertice(i) << endl;
+        for (int j = 0; j < G->cantidadArcos(i); j++)
+        {
+            cout << "Arco->" << G->obtenerArco(i, j) << " ";
+        }
+        cout << endl;
+    }
+    
+    for (int i = 0; i < 5; i++)
+    {
+        string distrito=Cola_Repartidor->obtenerPos(i)->getdistrito();
+        if (distrito=="San Miguel")
+        {
+            in = 0;
+        }
+        else if (distrito == "Barranco")
+        {
+            in = 1;
+        }
+        else if (distrito == "Jesus Maria")
+        {
+            in = 2;
+        }
+        else
+        {
+            cout << "Distrito no encontrado" << endl;
+            continue;
+		}
+
+        string distrito2 = usuario->getDistrito();
+
+        if (distrito2 == "San Miguel")
+        {
+            on = 0;
+        }
+        else if (distrito2 == "Barranco")
+        {
+            on = 1;
+        }
+        else if (distrito2 == "Jesus Maria")
+        {
+            on = 2;
+        }
+        else
+        {
+            cout << "Distrito no encontrado" << endl;
+            continue;
+        }
+
+		int aas=G->obtenerArco(in , on); // Obtener el arco correspondiente al distrito del repartidor
+
+        Cola_Repartidor->obtenerPos(i)->settarifa(aas);
+    }
+    
+    
+    
     cout << "- - - - - - - - - - - - - - - - - - - LISTA DE REPARTIDORES - - - - - - - - - - - - - - - - - - - - -" << endl;
 	Cola<Repartidor*>* temp_Cola = new Cola<Repartidor*>();//Cola temporal para almacenar repartidores
 	// Mostrar repartidores y almacenarlos en la cola temporal
     while (!Cola_Repartidor->esVacia())
     {
         Repartidor* repar = Cola_Repartidor->desencolar();
+        
         repar->MostrarTdo();
         temp_Cola->encolar(repar);
     }
@@ -268,7 +374,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             //-----------------------
 
-            cout << "\nIngrese el cÛdigo del producto que desea seleccionar: ";
+            cout << "\nIngrese el c√≥digo del producto que desea seleccionar: ";
             cin >> codigoBuscado;
             cout << "Ingrese la cantidad de stock que desea: ";
             cin >> stockelegido;
@@ -286,7 +392,7 @@ inline void Controlador::RegistrarProducto(int a)
                     {
                         List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
-                        cout << "CÛdigo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "C√≥digo: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -314,7 +420,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con cÛdigo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con c√≥digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -407,7 +513,7 @@ inline void Controlador::RegistrarProducto(int a)
 
 
 
-            cout << "\nIngrese el cÛdigo del producto que desea seleccionar: ";
+            cout << "\nIngrese el c√≥digo del producto que desea seleccionar: ";
             cin >> codigoBuscado;
             cout << "Ingrese la cantidad de stock que desea: ";
             cin >> stockelegido;
@@ -425,7 +531,7 @@ inline void Controlador::RegistrarProducto(int a)
                     {
                         List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
-                        cout << "CÛdigo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "C√≥digo: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -452,7 +558,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con cÛdigo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con c√≥digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -552,7 +658,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             
 
-            cout << "\nIngrese el cÛdigo del producto que desea seleccionar: ";
+            cout << "\nIngrese el c√≥digo del producto que desea seleccionar: ";
             cin >> codigoBuscado;
             cout << "Ingrese la cantidad de stock que desea: ";
             cin >> stockelegido;
@@ -570,7 +676,7 @@ inline void Controlador::RegistrarProducto(int a)
                     {
                         List_productos->obtenerPos(i)->disminuir_stock(stockelegido);
                         cout << "\nProducto seleccionado:\n";
-                        cout << "CÛdigo: " << List_productos->obtenerPos(i)->getid() << endl;
+                        cout << "C√≥digo: " << List_productos->obtenerPos(i)->getid() << endl;
                         cout << "Nombre: " << List_productos->obtenerPos(i)->getnombre() << endl;
                         cout << "Precio: $" << List_productos->obtenerPos(i)->getprecio() << endl;
                         cout << "Inventario restante: " << List_productos->obtenerPos(i)->getstock() << endl;
@@ -597,7 +703,7 @@ inline void Controlador::RegistrarProducto(int a)
 
             if (!encontrado)
             {
-                cout << "Producto con cÛdigo " << codigoBuscado << " no encontrado o sin inventario." << endl;
+                cout << "Producto con c√≥digo " << codigoBuscado << " no encontrado o sin inventario." << endl;
             }
         }
         else
@@ -611,12 +717,12 @@ inline void Controlador::RegistrarProducto(int a)
 
 inline void Controlador::RegistarCliente()
 {
-    string Correo, contraseÒa, nombre;
+    string Correo, contrase√±a, nombre;
     int telefono;
     string distrito;
     cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - REGISTRO DE USUARIO - - - - - - - - - - - - - - - - - - - - - - - -" << endl;
     cout << "Ingrese su correo :"; cin >> Correo;
-    cout << "Ingrese su contraseÒa :"; cin >> contraseÒa;
+    cout << "Ingrese su contrase√±a :"; cin >> contrase√±a;
     cout << "Ingrese su nombre:"; cin >> nombre;
     cout << "Ingrese su numero de telefono :"; cin >> telefono;
     cout << "Ingrese su distrito :" << endl;
@@ -628,13 +734,13 @@ inline void Controlador::RegistarCliente()
 }
 
 inline void Controlador::RegistrarUsuario() {
-    string nombre, correo, contraseÒa, distrito;
+    string nombre, correo, contrase√±a, distrito;
     int telefono;
     cout << "Nombre: "; cin >> nombre;
     cout << "Telefono: "; cin >> telefono;
     cout << "Distrito: "; cin >> distrito;
     cout << "Correo: "; cin >> correo;
-    cout << "ContraseÒa: "; cin >> contraseÒa;
+    cout << "Contrase√±a: "; cin >> contrase√±a;
 
     // Verifica si ya existe el usuario
     if (arbolUsuarios.buscar(nombre) != nullptr) {
@@ -642,31 +748,32 @@ inline void Controlador::RegistrarUsuario() {
         return;
     }
 
-    User* nuevo = new User(nombre, telefono, distrito, correo, contraseÒa);
+    User* nuevo = new User(nombre, telefono, distrito, correo, contrase√±a);
     arbolUsuarios.insertar(nuevo);
     guardarUsuariosEnArchivo(arbolUsuarios, "usuarios.txt");
     cout << "Usuario registrado correctamente." << endl;
 }
 
 bool Controlador::IniciarSesion() {
-    string nombre, contraseÒa;
+    string nombre, contrase√±a;
     cout << "Nombre: "; cin >> nombre;
-    cout << "ContraseÒa: ";
-    contraseÒa = leerContrasena(); // AquÌ se oculta la contraseÒa con asteriscos
+    cout << "Contrase√±a: ";
+    contrase√±a = leerContrasena(); // Aqu√≠ se oculta la contrase√±a con asteriscos
 
-    User* usuario = arbolUsuarios.buscar(nombre);
-    if (usuario && usuario->getContraseÒa() == contraseÒa) {
-        cout << "°Bienvenido, " << usuario->getNombre() << "!" << endl;
+    usuario = arbolUsuarios.buscar(nombre);
+    if (usuario && usuario->getContrase√±a() == contrase√±a) {
+        cout << "¬°Bienvenido, " << usuario->getNombre() << "!" << endl;
         return true;
     }
     else {
-        cout << "Usuario o contraseÒa incorrectos." << endl;
+        cout << "Usuario o contrase√±a incorrectos." << endl;
         return false;
     }
 }
 
 inline void Controlador::Vercarrito()
 {
+    
     bool menor = false;
     int eliminar;
     int opccarito;
@@ -712,7 +819,7 @@ inline void Controlador::Vercarrito()
 
     case 2:
 
-        cout << "Ingrese el cÛdigo del producto a eliminar: "; cin >> eliminar;
+        cout << "Ingrese el c√≥digo del producto a eliminar: "; cin >> eliminar;
 
 
         for (int i = 0; i < List_Carrito->longitud(); i++)
@@ -893,17 +1000,17 @@ inline void Controlador::VerHistorial()
 inline void Controlador::GenerarArbolBalanceado()
 {
     if (Lista_Historial->esVacia()) {
-        cout << "El historial de productos est· vacÌo. No se puede generar un ·rbol AVL." << endl;
+        cout << "El historial de productos est√° vac√≠o. No se puede generar un √°rbol AVL." << endl;
         return;
     }
-    cout << "\n--- Generando ¡rbol AVL de Historial de Productos ---\n";
+    cout << "\n--- Generando √Årbol AVL de Historial de Productos ---\n";
     for (int i = 0; i < Lista_Historial->longitud(); ++i) {
         producto* p = Lista_Historial->obtenerPos(i);
         arbol_historial.insertar(p);
 
     }
-    cout << "¡rbol AVL del historial de productos generado correctamente.\n";
-    cout << "\n--- Contenido del ¡rbol AVL (ordenado por nombre) ---\n";
+    cout << "√Årbol AVL del historial de productos generado correctamente.\n";
+    cout << "\n--- Contenido del √Årbol AVL (ordenado por nombre) ---\n";
     arbol_historial.enOrden([](producto* p) {
         cout << "  - " << p->getnombre() << " (ID: " << p->getid() << ", Precio: $" << p->getprecio() << ")\n";
     });
