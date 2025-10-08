@@ -56,10 +56,7 @@ The system reads and writes **plain text files (.txt)** to manage data persisten
 ---
 
 ## 🧰 Technologies Used
-- **C++ (main language)**  
-- **Standard Template Library (STL)** for basic containers  
-- **File I/O (fstream)** for data persistence  
-
+[![My Skills](https://skillicons.dev/icons?i=cpp)](https://skillicons.dev)
 ---
 
 ## 🧠 Learning Outcomes
